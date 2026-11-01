@@ -4,7 +4,7 @@ import AboutUsFramePhone from "../frames/about-us/AboutUsFramePhone";
 
 export default function AboutUsMobile() {
     return (
-        <section className="block h-screen md:hidden">
+        <section className="block h-screen lg:hidden">
             <AboutUsFramePhone className="h-full flex flex-col text-white gap-8">
                 <div className="flex flex-col gap-3">
                     <div className="font-chakra font-bold italic text-3xl">

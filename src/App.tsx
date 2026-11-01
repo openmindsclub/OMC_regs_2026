@@ -1,9 +1,7 @@
-import AboutUsFrameCTA from "./components/frames/about-us/AboutUsFrameCTA";
-import AboutUsFrameDesktop from "./components/frames/about-us/AboutUsFrameDesktop";
-import AboutUsMobile from "./components/screens/AboutUsMobile";
+import AboutUs from "./components/screens/AboutUs";
 
 export function App() {
   return (
-    <AboutUsMobile/>
+    <AboutUs/>
   );
 }
