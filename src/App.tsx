@@ -1,6 +1,4 @@
 import AboutUsFrameDesktop from "./components/frames/about-us/AboutUsFrameDesktop";
-import AboutUsFrameTablet from "./components/frames/about-us/AboutUsFrameTablet";
-import AboutUsFramePhone from "./components/frames/about-us/AboutUsFramePhone";
 
 export function App() {
     return (
