@@ -1,3 +1,5 @@
+import AdaptiveFrame from "../AdaptiveFrame";
+
 const svg = `<svg
               width="1696"
               height="957"
@@ -24,28 +26,24 @@ const svg = `<svg
               />
               </svg>`;
 
-const frame = `url("data:image/svg+xml, ${encodeURIComponent(svg)}") 196 362 221 355 / 196px 362px 221px 355px stretch`;
+const cutoffs = {
+    top: 196,
+    right: 362,
+    bottom: 221,
+    left: 355,
+};
 
-export default function CyberFrameMain({
-    children,
-    style,
-    className,
-}: React.HTMLAttributes<HTMLDivElement>) {
+export default function AboutUsFrameDesktop(
+    props: React.HTMLAttributes<HTMLDivElement>,
+) {
     return (
-        <div
-            className={className}
-            style={{
-                boxSizing: "border-box",
-                minWidth: 717,
-                minHeight: 417,
-                padding: "81px 174px 150px 103px",
-                borderStyle: "solid",
-                borderWidth: 0,
-                borderImage: frame,
-                ...style,
-            }}
+        <AdaptiveFrame
+            {...props}
+            svg={svg}
+            cutoffs={cutoffs}
+            padding="81px 174px 150px 103px"
         >
-            {children}
-        </div>
+            {props.children}
+        </AdaptiveFrame>
     );
 }

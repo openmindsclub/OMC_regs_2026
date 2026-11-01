@@ -72,7 +72,7 @@ const cutoffs = {
     right: 100
 }
 
-export default function CyberFrameMedium(props: React.HTMLAttributes<HTMLDivElement>) { 
+export default function AboutUsFrameTablet(props: React.HTMLAttributes<HTMLDivElement>) { 
     return <AdaptiveFrame svg={svg} cutoffs={cutoffs} padding="94px 87px 102px 69px" {...props}> 
         { props.children}
     </AdaptiveFrame>
