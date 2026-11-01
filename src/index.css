@@ -4,4 +4,19 @@
 @theme {
   --font-jakarta: "Plus Jakarta Sans", sans-serif;
   --font-orbitron: "Orbitron", sans-serif;
+
+  --color-neon-green: #00f66a;
+  --color-muted: #303539;
+
+  /* default, this is overridden inside the BatteryLoader component*/
+  --animate-battery-snake: battery-snake 1.2s steps(6) infinite;
+
+  @keyframes battery-snake {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
 }
