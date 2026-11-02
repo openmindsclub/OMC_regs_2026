@@ -1,21 +1,19 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Design from "./components/department/design.jsx";
-import Marketing from "./components/department/marketing.jsx";
+import { departmentRoutes } from "./components/department/Departments.jsx";
 import AboutUs from "./components/screens/AboutUs";
 import RegisterationForm from "./components/screens/RegisterationForm";
-import Footer from "./pages/Footer.js";
 
 export function App() {
   return (
-    <BrowserRouter>
+    <>
       <div className="font-orbitron bg-black h-screen flex flex-col justify-center">
         <Routes>
-          <Route path="/design" element={<Design />} />
-          <Route path="/marketing" element={<Marketing />} />
+          {departmentRoutes}
           <Route path="/about" element={<AboutUs />} />
           <Route path="/register" element={<RegisterationForm />} />
         </Routes>
+        {/* If you want the Footer rendered globally, you can include it here or inside specific routes */}
       </div>
-    </BrowserRouter>
+    </>
   );
 }
