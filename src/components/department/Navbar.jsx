@@ -476,10 +476,10 @@ function DesktopDepartmentMenu({ label, departments, active, pathname }) {
                   }`}
                 >
                   <span className="flex flex-col">
-                    <span className="text-xs font-bold tracking-wider group-hover:text-green-300 transition-colors">
+                    <span className="text-xs font-jakarta font-bold tracking-wider group-hover:text-green-300 transition-colors">
                       {dept.label}
                     </span>
-                    <span className="text-[10px] text-neutral-400 font-normal">
+                    <span className="text-[10px] text-neutral-400 font-jakarta font-normal">
                       {dept.desc}
                     </span>
                   </span>
@@ -499,7 +499,7 @@ function DesktopDepartmentMenu({ label, departments, active, pathname }) {
 function MobileDrawer({ departments, pathname, isActive, onPick, onClose }) {
   const [deptOpen, setDeptOpen] = useState(false);
   const row = (on) =>
-    `flex items-center justify-between text-left text-xs tracking-[0.2em] font-semibold py-2 px-3 rounded-lg transition-colors ${
+    `flex items-center justify-between text-left text-xs tracking-[0.2em] font-jakarta font-semibold py-2 px-3 rounded-lg transition-colors ${
       on
         ? "bg-green-500/20 text-green-300 border-l-2 border-green-400"
         : "text-neutral-300 hover:text-white hover:bg-white/5"
@@ -531,7 +531,7 @@ function MobileDrawer({ departments, pathname, isActive, onPick, onClose }) {
                       to={dept.path}
                       onClick={onClose}
                       aria-current={current ? "page" : undefined}
-                      className={`flex items-center justify-between py-1.5 px-2.5 rounded-lg text-xs font-medium transition-colors ${
+                      className={`flex items-center justify-between py-1.5 px-2.5 rounded-lg text-xs font-jakarta font-medium transition-colors ${
                         current
                           ? "text-green-300 bg-green-500/15"
                           : "text-neutral-400 hover:text-white hover:bg-white/5"
