@@ -8,6 +8,8 @@
   --color-neon-green: #00f66a;
   --color-muted: #303539;
 
+  --color-card-footer: #5b716f;
+
   /* default, this is overridden inside the BatteryLoader component*/
   --animate-battery-snake: battery-snake 1.2s steps(6) infinite;
 

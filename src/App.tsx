@@ -1,12 +1,15 @@
-import AboutUsFrameCTA from "./components/frames/about-us/AboutUsFrameCTA";
-import AboutUsFrameDesktop from "./components/frames/about-us/AboutUsFrameDesktop";
+import Design from "./components/department/design.jsx";
+import Marketing from "./components/department/marketing.jsx";
+import { Route, Routes } from "react-router-dom";
+import Footer from "./pages/Footer.js";
 
 export function App() {
   return (
     <div className="font-orbitron bg-black h-screen flex flex-col justify-center">
-      <AboutUsFrameDesktop className="h-[80%] text-white">
-        <AboutUsFrameCTA className="w-fit">Click Here Dumass</AboutUsFrameCTA>
-      </AboutUsFrameDesktop>
+      <Routes>
+        <Route path="/design" element={<Design />} />
+        <Route path="/marketing" element={<Marketing />}></Route>
+      </Routes>
     </div>
   );
 }
