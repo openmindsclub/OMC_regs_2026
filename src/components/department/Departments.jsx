@@ -6,15 +6,9 @@ import Navbar, { RegistrationButton } from "./Navbar";
 
 gsap.registerPlugin(useGSAP);
 
-/* ════════════════════════════════════════════════════════════════════════════
-   1. CONTENT — the only thing that differs between departments.
-      Add a department = add one object here. The route and nav entry follow.
-   ════════════════════════════════════════════════════════════════════════════ */
+const POSTER = (name) => `/posters/${name}.avif`;
 
-// TODO: every department currently shares one poster. Give each its own still.
-const POSTER = "/figma-reference.jpg";
-
-export const DEPARTMENTS = [
+const DEPARTMENTS = [
   {
     id: "design",
     path: "/design",
@@ -31,7 +25,7 @@ export const DEPARTMENTS = [
     ],
     media: {
       video: "/killua-lightning.mp4",
-      poster: POSTER,
+      poster: POSTER("killua-lightning"),
       title: "/kilwa.svg",
     },
   },
@@ -50,7 +44,7 @@ export const DEPARTMENTS = [
     ],
     media: {
       video: "/gone.mp4",
-      poster: POSTER,
+      poster: POSTER("gone"),
       title: "/Multimediagg_vert%201%201.svg",
     },
   },
@@ -65,7 +59,11 @@ export const DEPARTMENTS = [
       "Brand Strategy & Identity — The Brand Builders",
       "Marketing Strategy & Campaigns — The Strategists",
     ],
-    media: { video: "/kourabika.mp4", poster: POSTER, title: "/kourabika.svg" },
+    media: {
+      video: "/kourabika.mp4",
+      poster: POSTER("kourabika"),
+      title: "/kourabika.svg",
+    },
   },
   {
     id: "it",
@@ -81,7 +79,11 @@ export const DEPARTMENTS = [
       "Cybersecurity — The Guardians",
       "Web Development — The World Builders",
     ],
-    media: { video: "/krolo.mp4", poster: POSTER, title: "/it.svg" },
+    media: {
+      video: "/krolo.mp4",
+      poster: POSTER("krolo"),
+      title: "/it.svg",
+    },
   },
   {
     id: "hr",
@@ -96,7 +98,11 @@ export const DEPARTMENTS = [
       "Recruitment & Integration",
       "Member Relations & Engagement",
     ],
-    media: { video: "/yourio.mp4", poster: POSTER, title: "/hr.svg" },
+    media: {
+      video: "/yourio.mp4",
+      poster: POSTER("yourio"),
+      title: "/hr.svg",
+    },
   },
   {
     id: "b2b",
@@ -112,34 +118,30 @@ export const DEPARTMENTS = [
       "Partnerships — The Network Builders",
       "Sponsorship — The Opportunity Seekers",
     ],
-    media: { video: "/ilomi.mp4", poster: POSTER, title: "/b2b.svg" },
+    media: {
+      video: "/ilomi.mp4",
+      poster: POSTER("ilomi"),
+      title: "/b2b.svg",
+    },
   },
 ];
 
-/* ════════════════════════════════════════════════════════════════════════════
-   2. FROSTED-GLASS CYBER CARD
-      Tweak the look here — every card on every page reads these.
-   ════════════════════════════════════════════════════════════════════════════ */
-
-const GLASS_BLUR = "blur(20px) saturate(140%)";
+const GLASS_BLUR = "blur(8px)";
 const GLASS_FILL =
-  "linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.03) 60%, rgba(255,255,255,0.06) 100%), linear-gradient(rgba(0,0,0,0.28), rgba(0,0,0,0.28))";
+  "linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.03) 60%, rgba(255,255,255,0.06) 100%), linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.38))";
 const RIM_STOPS = [
-  // [offset, opacity] — bright top-left edge fading across the card
   [0, 0.85],
   [0.4, 0.5],
   [0.75, 0.4],
   [1, 0.55],
 ];
 
-// Desktop outline (Figma). The right-hand card is this, mirrored.
 const HUD_OUTLINE =
   "M53.9889 0.322762C100.688 -0.395872 150.286 0.310074 197.18 0.308866L485.658 0.339063C494.833 8.20418 506.175 19.6679 515.071 28.1242L590.756 28.0965C597.314 19.4807 605.331 10.1065 612.278 1.58792L710 1.60845L642.988 127.915C636.52 140.174 627.002 159.507 619.437 172.146C618.906 173.034 616.876 172.815 615.378 172.852L571.113 172.858C558.819 188.333 546.353 203.714 533.716 218.999L264.871 219L249.339 203.942L129.137 203.939C124.079 208.909 119.087 213.924 114.16 218.984L0.172854 218.977L0 50.7346C17.6 33.9113 36.1306 17.0337 53.9889 0.322762Z";
 const HUD_BRACKET =
   "M0.16215 0.0260815C13.5585 0.0844439 26.9554 0.0751262 40.3514 0C35.2511 1.66271 14.6243 8.05216 11.3888 9.79248C7.9904 16.791 4.2945 23.7163 0.306133 30.559C-0.285059 21.2247 0.161974 9.53544 0.16215 0.0260815Z";
 const HUD_ACCENT = "M709.291 1.5H643.261L690.831 10L693.671 26L709.291 1.5Z";
 
-// Mobile outline: a rectangle with angled notches, sized to whatever the card measures.
 const mobileOutline = (w, h) =>
   `M22 1L${w - 32} 1L${w - 24} 8L${w - 10} 8L${w - 1} 17L${w - 1} ${h - 12}L${w - 12} ${h - 1}` +
   `L32 ${h - 1}L24 ${h - 8}L10 ${h - 8}L1 ${h - 17}L1 22Z`;
@@ -164,39 +166,6 @@ function RimGradient({ id, w, h }) {
         />
       ))}
     </linearGradient>
-  );
-}
-
-/** Soft shadow that exists ONLY outside the outline (for contrast against the video). */
-function OuterShadow({ id, d, w, h, blur = 10, opacity = 0.15, dy = 4 }) {
-  return (
-    <>
-      <defs>
-        <mask
-          id={`${id}-m`}
-          maskUnits="userSpaceOnUse"
-          x={-w}
-          y={-h}
-          width={w * 3}
-          height={h * 3}
-        >
-          <rect x={-w} y={-h} width={w * 3} height={h * 3} fill="#fff" />
-          <path d={d} fill="#000" />
-        </mask>
-        <filter id={`${id}-f`} x="-30%" y="-40%" width="160%" height="180%">
-          <feGaussianBlur stdDeviation={blur} />
-        </filter>
-      </defs>
-      <g mask={`url(#${id}-m)`}>
-        <path
-          d={d}
-          fill="#000"
-          fillOpacity={opacity}
-          filter={`url(#${id}-f)`}
-          transform={`translate(0 ${dy})`}
-        />
-      </g>
-    </>
   );
 }
 
@@ -236,7 +205,6 @@ function MobileFrame({ uid, w, h }) {
           </clipPath>
           <RimGradient id={rim} w={w} h={h} />
         </defs>
-        <OuterShadow id={`${uid}-msh`} d={d} w={w} h={h} blur={8} dy={3} />
         <path d={d} stroke={`url(#${rim})`} strokeWidth="1" />
         <path d={MOBILE_BRACKET} fill="#fff" />
       </svg>
@@ -260,13 +228,11 @@ function DesktopFrame({ uid, flip }) {
         aria-hidden="true"
       >
         <defs>
-          {/* same outline twice: normalised for the HTML glass, raw for clipping the SVG rim */}
           <clipPath id={bbox} clipPathUnits="objectBoundingBox">
             <path d={HUD_OUTLINE} transform={`scale(${1 / 710} ${1 / 219})`} />
           </clipPath>
           <RimGradient id={rim} w={710} h={219} />
         </defs>
-        <OuterShadow id={`${uid}-dsh`} d={HUD_OUTLINE} w={710} h={219} />
         <path
           d={HUD_OUTLINE}
           stroke={`url(#${rim})`}
@@ -280,10 +246,6 @@ function DesktopFrame({ uid, flip }) {
   );
 }
 
-/**
- * One card, two shapes: notched rectangle below `md`, Figma outline from `md` up.
- * Children render ONCE (the old code rendered every card's copy twice and hid one with CSS).
- */
 function CyberCard({ side = "left", children }) {
   const uid = useId().replace(/:/g, "");
   const ref = useRef(null);
@@ -323,7 +285,6 @@ function CyberCard({ side = "left", children }) {
   );
 }
 
-// Type scale shared by both cards (mobile first, desktop scales with the viewport).
 const CARD_H2 =
   "text-white font-jakarta font-bold tracking-wide text-base sm:text-lg mb-2 md:text-[clamp(13px,min(1.7vw,3vh),34px)] md:mb-[0.3em]";
 const CARD_P =
@@ -360,7 +321,6 @@ function SpecializationsCard({ items }) {
   );
 }
 
-/* Hazard-stripe trapezoid between the two cards (desktop only). */
 const ACCENT_TRAPEZOID =
   "M121.981 0.00878906L289.058 0L355.508 150.14L55.5083 150.15L121.981 0.00878906Z";
 const ACCENT_BORDER =
@@ -388,7 +348,6 @@ function CenterAccent() {
   const rim = `${uid}-arim`;
   return (
     <div className="relative w-full aspect-[412/188] select-none pointer-events-none">
-      {/* glass covers only the trapezoid (top 152 of 188 units); stripes sit below it */}
       <div
         className="absolute inset-x-0 top-0"
         style={{ height: `${(152 / 188) * 100}%` }}
@@ -410,14 +369,6 @@ function CenterAccent() {
           </clipPath>
           <RimGradient id={rim} w={412} h={150} />
         </defs>
-        <OuterShadow
-          id={`${uid}-ash`}
-          d={ACCENT_TRAPEZOID}
-          w={412}
-          h={152}
-          blur={8}
-          dy={3}
-        />
         <path d={ACCENT_BORDER} fill={`url(#${rim})`} />
         {ACCENT_STRIPES.map((d) => (
           <path key={d} d={d} fill="#fff" />
@@ -427,11 +378,6 @@ function CenterAccent() {
   );
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   3. PAGE
-   ════════════════════════════════════════════════════════════════════════════ */
-
-// [data-anim name, from-vars, timeline position]. Opacity 0 is added to every step.
 const INTRO_SEQUENCE = [
   ["navbar", { y: -40, duration: 1, ease: "expo.out" }],
   ["badge", { x: -30, duration: 0.7 }, "-=0.5"],
@@ -496,7 +442,7 @@ function DepartmentPage({ dept }) {
           <div className="flex flex-col items-start select-none">
             <div
               data-anim="badge"
-              className="inline-flex items-center px-3 sm:px-4 py-1 sm:py-1.5 mb-2 bg-white/[0.06] backdrop-blur-md border border-white/25 shadow-lg"
+              className="inline-flex items-center px-3 sm:px-4 py-1 sm:py-1.5 mb-2 bg-black/30 border border-white/25"
             >
               <span className="text-white text-xs sm:text-sm md:text-base lg:text-xl font-bold tracking-[1.5px] sm:tracking-[2px]">
                 DEPARTMENT
@@ -510,7 +456,7 @@ function DepartmentPage({ dept }) {
               <img
                 src={title}
                 alt={dept.label}
-                className="w-full h-auto md:w-auto md:h-[min(25vh,270px)] md:max-w-[min(36vw,680px)] md:object-contain md:object-left-top drop-shadow-[0_8px_32px_rgba(0,0,0,0.8)]"
+                className="w-full h-auto md:w-auto md:h-[min(25vh,270px)] md:max-w-[min(36vw,680px)] md:object-contain md:object-left-top drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
               />
             </div>
           </div>
@@ -525,7 +471,6 @@ function DepartmentPage({ dept }) {
           <div data-anim="right-card" className="w-full min-w-0 md:col-start-3">
             <SpecializationsCard items={dept.specializations} />
           </div>
-          {/* outer box only centers; GSAP animates the inner one, so their transforms never fight */}
           <div className="hidden md:flex absolute inset-x-0 bottom-[0.6vw] justify-center pointer-events-none z-10">
             <div data-anim="center-accent" className="w-[24.4%] max-w-[420px]">
               <CenterAccent />
@@ -543,12 +488,6 @@ function DepartmentPage({ dept }) {
   );
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   4. ROUTES
-   ════════════════════════════════════════════════════════════════════════════ */
-
-// `key` on the page forces a fresh mount per department, so the video source
-// reloads and the intro animation replays when you switch between them.
 export const departmentRoutes = DEPARTMENTS.map((dept) => (
   <Route
     key={dept.id}
@@ -557,7 +496,6 @@ export const departmentRoutes = DEPARTMENTS.map((dept) => (
   />
 ));
 
-/** Drop-in: <DepartmentRoutes /> inside your <BrowserRouter>. Unknown URLs go to the first department. */
 export default function DepartmentRoutes() {
   return (
     <Routes>

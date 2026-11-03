@@ -1,31 +1,15 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-/* ────────────────────────────────────────────────────────────────────────────
-   Brand logo (Figma export — kept verbatim, only the wrapper was tidied)
-   ──────────────────────────────────────────────────────────────────────────── */
-/**
- * Hunter x Hunter vector logo
- */
 function HunterLogo({ className = "h-9 sm:h-10 w-auto" }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 165 78"
       fill="none"
-      className={`select-none transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] ${className}`}
+      className={`select-none transition-transform duration-300 group-hover:scale-105 ${className}`}
     >
-      <foreignObject x="-17.8378" y="-17.8378" width="200.676" height="113.041">
-        <div
-          style={{
-            backdropFilter: "blur(8.92px)",
-            clipPath: "url(#bgblur_0_214_14462_clip_path)",
-            height: "100%",
-            width: "100%",
-          }}
-        />
-      </foreignObject>
-      <g opacity="0.9" data-figma-bg-blur-radius="17.8378">
+      <g opacity="0.9">
         <rect
           width="165"
           height="77.3656"
@@ -274,23 +258,10 @@ function HunterLogo({ className = "h-9 sm:h-10 w-auto" }) {
           fill="#FEFEFE"
         />
       </g>
-      <defs>
-        <clipPath
-          id="bgblur_0_214_14462_clip_path"
-          transform="translate(17.8378 17.8378)"
-        >
-          <rect width="165" height="77.3656" rx="10.7027" />
-        </clipPath>
-      </defs>
     </svg>
   );
 }
 
-/* ────────────────────────────────────────────────────────────────────────────
-   Registration button (Figma frame).
-   Ids are generated per instance — the old version rendered this twice
-   (desktop bar + mobile drawer) with the same ids, which is invalid SVG.
-   ──────────────────────────────────────────────────────────────────────────── */
 const REG = {
   bar: "M244.396 0.00233825L251.968 6.10352e-05C252.078 2.62606 251.986 5.92457 251.986 8.59443L251.98 24.85V73.6852C249.691 73.7775 246.735 73.6946 244.395 73.6959L244.396 0.00233825Z",
   outline:
@@ -311,8 +282,8 @@ function RegistrationButton({
   const clipId = `reg-clip-${uid}`;
 
   return (
-    <button
-      type="button"
+    <Link
+      to="/register"
       className={`relative inline-flex items-center justify-center group cursor-pointer ${className}`}
       {...props}
     >
@@ -354,7 +325,7 @@ function RegistrationButton({
           height="137.366"
         >
           <div
-            className="w-full h-full bg-[linear-gradient(0deg,#737373_0%,#737373_100%),rgba(51,51,51,0.30)] bg-blend-overlay backdrop-blur-[17px]"
+            className="w-full h-full bg-[linear-gradient(0deg,#737373_0%,#737373_100%),rgba(51,51,51,0.30)] bg-blend-overlay"
             style={{ clipPath: `url(#${clipId})` }}
           />
         </foreignObject>
@@ -373,7 +344,7 @@ function RegistrationButton({
       <span className="absolute inset-0 flex items-center justify-center pl-3 text-xs md:text-sm font-jakarta font-semibold tracking-wide text-white">
         {children}
       </span>
-    </button>
+    </Link>
   );
 }
 
@@ -381,11 +352,9 @@ function RegistrationButton({
    Navbar
    ──────────────────────────────────────────────────────────────────────────── */
 
-// Home / About / Build / Application have no routes yet — they only highlight.
-// Give an item a `to` and it becomes a real <Link>.
 const NAV_ITEMS = [
-  { id: "home", label: "HOME" },
-  { id: "about", label: "ABOUT" },
+  { id: "home", to: "/home", label: "HOME" },
+  { id: "about", to: "/about", label: "ABOUT" },
   { id: "department", label: "DEPARTMENT", menu: true },
   { id: "build", label: "BUILD" },
   { id: "application", label: "APPLICATION" },
@@ -393,11 +362,10 @@ const NAV_ITEMS = [
 
 const ITEM =
   "relative flex items-center gap-1.5 text-xs lg:text-sm tracking-[0.18em] font-jakarta font-semibold transition-colors duration-200 cursor-pointer";
-const ITEM_ON = "text-white drop-shadow-[0_0_10px_rgba(74,222,128,0.9)]";
-const ITEM_OFF =
-  "text-neutral-300 hover:text-green-300 hover:drop-shadow-[0_0_8px_rgba(74,222,128,0.6)]";
+const ITEM_ON = "text-white";
+const ITEM_OFF = "text-neutral-300 hover:text-green-300";
 const PANEL =
-  "rounded-2xl bg-neutral-950/85 backdrop-blur-2xl border border-white/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_12px_40px_rgba(0,0,0,0.7)]";
+  "rounded-2xl bg-neutral-950/90 backdrop-blur-sm border border-white/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_8px_20px_rgba(0,0,0,0.6)]";
 
 const Underline = () => (
   <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-4 h-[2px] bg-green-400 rounded-full shadow-[0_0_8px_#4ade80]" />
@@ -569,7 +537,6 @@ function MobileDrawer({ departments, pathname, isActive, onPick, onClose }) {
 }
 
 /**
- * Global top bar. "Department" is highlighted automatically from the current route.
  * @param {{ departments: {id:string,label:string,desc:string,path:string}[] }} props
  */
 export default function Navbar({ departments = [] }) {
@@ -596,7 +563,7 @@ export default function Navbar({ departments = [] }) {
       data-anim="navbar"
       className="relative z-40 w-full pt-3 sm:pt-4 md:pt-6 px-3 sm:px-6 lg:px-8 xl:px-12"
     >
-      <nav className="max-w-[1680px] mx-auto flex items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] rounded-xl sm:rounded-2xl bg-white/[0.06] backdrop-blur-[28px] border border-white/15 px-3 sm:px-5 md:px-6 py-2 sm:py-2.5 transition-colors duration-300 hover:border-green-400/40">
+      <nav className="max-w-[1680px] mx-auto flex items-center justify-between md:grid md:grid-cols-[1fr_auto_1fr] rounded-xl sm:rounded-2xl bg-neutral-950/40 backdrop-blur-[8px] border border-white/15 px-3 sm:px-5 md:px-6 py-2 sm:py-2.5 transition-colors duration-300 hover:border-green-400/40">
         <Link
           to="/"
           aria-label="Home"
