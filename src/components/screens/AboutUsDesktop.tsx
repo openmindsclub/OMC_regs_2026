@@ -4,26 +4,32 @@ import AboutUsFrameDesktop from "../frames/about-us/AboutUsFrameDesktop";
 
 export default function AboutUsDesktop() {
     return (
-        <section className="hidden h-screen lg:block">
-            <AboutUsFrameDesktop className="relative h-full flex items-center text-white">
-                <div className="h-full flex flex-row text-white items-center gap-16">
-                    <img src="japenese-text.svg" className="h-full" />
-                    <div className="flex flex-col gap-16 w-[60%]">
+        <section className="hidden min-h-screen lg:block">
+            <AboutUsFrameDesktop className="relative min-h-screen flex items-center text-white">
+                <div className="flex flex-row text-white items-center gap-[clamp(1rem,3vw,4rem)]">
+                    <img
+                        src="japenese-text.svg"
+                        className="h-[80vh] w-auto shrink-0 object-contain"
+                    />
+                    <div className="flex flex-col gap-[clamp(1.5rem,5vh,4rem)] min-w-0 w-[60%]">
                         <div className="flex flex-col gap-4">
-                            <div className="font-chakra font-bold italic text-5xl">
+                            <div className="font-chakra font-bold italic text-[clamp(1.75rem,3.5vw,3rem)]">
                                 <h2>Welcome to the</h2>
-                                <img src="/association-hd.png" />
+                                <img
+                                    src="/association-hd.png"
+                                    className="max-w-full h-auto"
+                                />
                             </div>
-                            <span className="flex gap-6 items-center w-fit my-4 text-3xl font-semibold tracking-[25%] italic relative after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:bg-linear-to-r after:from-white after:to-transparent">
+                            <span className="flex flex-wrap gap-6 items-center w-fit max-w-full my-4  text-[clamp(1.1rem,2vw,1.875rem)] font-semibold tracking-[25%] italic relative after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:bg-linear-to-r after:from-white after:to-transparent">
                                 SO YOU WANNA BE A HUNTER?
                                 <BatteryLoader />
                             </span>
                         </div>
-                        <div className="flex flex-col gap-6">
-                            <div className="flex flex-start font-chakra text-5xl font-bold items-start gap-4">
+                        <div className="flex flex-col gap-[clamp(0.75rem,2vh,1.5rem)]">
+                            <div className="flex flex-start font-chakra text-[clamp(1.75rem,3.5vw,3rem)] font-bold items-start gap-4">
                                 <img
                                     src="/Club emblem.svg"
-                                    className="size-11"
+                                    className="size-[clamp(1.75rem,3vw,2.75rem)] shrink-0"
                                 />
                                 <h2>
                                     Welcome to
@@ -32,7 +38,7 @@ export default function AboutUsDesktop() {
                                     </span>
                                 </h2>
                             </div>
-                            <p className="font-jakarta text-xl leading-9 not-italic font-light border-l border-neon-green pl-3">
+                            <p className="font-jakarta text-[clamp(0.95rem,1.4vw,1.25rem)] leading-9 not-italic font-light border-l border-neon-green pl-3">
                                 A community built around technology, creativity,
                                 and collaboration. From development and
                                 cybersecurity to marketing and design, there’s a
@@ -40,8 +46,8 @@ export default function AboutUsDesktop() {
                                 ambitions.
                             </p>
                         </div>
-                        <AboutUsFrameCTA className="hover:cursor-pointer w-[40%]">
-                            <div className="flex font-jakarta text-xl font-extrabold items-center gap-4">
+                        <AboutUsFrameCTA className="hover:cursor-pointer w-[40%] min-w-64">
+                            <div className="flex font-jakarta text-[clamp(1rem,1.4vw,1.25rem)] font-extrabold items-center gap-4">
                                 <img src="Arrow.svg" />
                                 EXPLORE DEPS
                                 <img src="neon-bevel.svg" className="ml-auto" />
@@ -50,32 +56,30 @@ export default function AboutUsDesktop() {
                     </div>
                 </div>
 
-                <div className="absolute right-0 top-0 h-full w-[40%]">
+                <div className="absolute right-0 top-0 h-full w-[40%] pointer-events-none">
                     <div className="relative size-full">
                         <img
                             src="Spiders.svg"
-                            className="absolute top-40 right-50 scale-200"
+                            className="absolute top-[15%] right-[20%] w-[30%] scale-200"
                         />
-            
+
                         <img
                             src="nen-circle.svg"
                             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[80%] object-contain"
                         />
-            
+
                         <img
                             src="Symbols.svg"
-                            className="absolute right-12 top-1/3  scale-125"
+                            className="absolute right-[8%] top-1/3 w-[3%]"
                         />
 
-                        <span className="font-chakra font-bold text-neon-green tracking-widest absolute bottom-12 -left-60 text-xl">
-                            HUNTER X HUNTER
-                        </span>
-
-                        <div className="absolute bottom-32 right-32 scale-150">
-                          
-                        <BatteryLoader/>
+                        <div className="absolute bottom-[15%] right-[15%] scale-150">
+                            <BatteryLoader />
                         </div>
                     </div>
+                    <span className="font-chakra font-bold text-neon-green tracking-widest absolute bottom-4 left-1/2 -translate-x-1/2 text-[clamp(0.9rem,1.4vw,1.25rem)] whitespace-nowrap">
+                        HUNTER X HUNTER
+                    </span>
                 </div>
             </AboutUsFrameDesktop>
         </section>
