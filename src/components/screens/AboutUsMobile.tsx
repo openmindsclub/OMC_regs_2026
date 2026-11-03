@@ -4,14 +4,14 @@ import AboutUsFramePhone from "../frames/about-us/AboutUsFramePhone";
 
 export default function AboutUsMobile() {
     return (
-        <section className="block h-screen lg:hidden">
-            <AboutUsFramePhone className="h-full flex flex-col text-white gap-8">
+        <section className="block min-h-svh lg:hidden">
+            <AboutUsFramePhone className="min-h-svh flex flex-col text-white gap-8">
                 <div className="flex flex-col gap-3">
                     <div className="font-chakra font-bold italic text-3xl">
                         <h2>Welcome to the</h2>
-                        <img src="/association.png" />
+                        <img src="/association.png" className="max-w-full h-auto" />
                     </div>
-                    <div className="flex justify-between items-center my-4">
+                    <div className="flex flex-wrap gap-3 justify-between items-center my-4">
                         <span className="text-sm relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:bg-linear-to-r after:from-white after:to-transparent">
                             SO YOU WANNA BE A HUNTER?
                         </span>
@@ -35,7 +35,7 @@ export default function AboutUsMobile() {
                         skills, ideas, and ambitions.
                     </p>
                 </div>
-                <div className="relative h-[50%]">
+                <div className="relative aspect-square w-full max-w-sm shrink-0 self-center">
                     <img
                         src="Spiders.svg"
                         className=" absolute top-0 right-0 -z-1"
