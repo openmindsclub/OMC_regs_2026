@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { DEPARTMENT_LINKS } from "./DepartmentLinks";
 
 function HunterLogo({ className = "h-9 sm:h-10 w-auto" }) {
   return (
@@ -353,11 +354,11 @@ function RegistrationButton({
    ──────────────────────────────────────────────────────────────────────────── */
 
 const NAV_ITEMS = [
-  { id: "home", to: "/home", label: "HOME" },
-  { id: "about", to: "/about", label: "ABOUT" },
+  { id: "home", to: "/", label: "HOME" },
+  { id: "about", to: "/#about", label: "ABOUT" },
   { id: "department", label: "DEPARTMENT", menu: true },
-  { id: "build", label: "BUILD" },
-  { id: "application", label: "APPLICATION" },
+  { id: "build", to: "/build", label: "BUILD" },
+  { id: "application", to: "/application", label: "APPLICATION" },
 ];
 
 const ITEM =
@@ -464,7 +465,7 @@ function DesktopDepartmentMenu({ label, departments, active, pathname }) {
   );
 }
 
-function MobileDrawer({ departments, pathname, isActive, onPick, onClose }) {
+function MobileDrawer({ departments, pathname, isActive, onClose }) {
   const [deptOpen, setDeptOpen] = useState(false);
   const row = (on) =>
     `flex items-center justify-between text-left text-xs tracking-[0.2em] font-jakarta font-semibold py-2 px-3 rounded-lg transition-colors ${
@@ -516,17 +517,15 @@ function MobileDrawer({ departments, pathname, isActive, onPick, onClose }) {
             )}
           </div>
         ) : (
-          <button
+          <Link
             key={item.id}
-            type="button"
-            onClick={() => {
-              onPick(item);
-              onClose();
-            }}
+            to={item.to}
+            onClick={onClose}
+            aria-current={isActive(item) ? "page" : undefined}
             className={row(isActive(item))}
           >
             {item.label}
-          </button>
+          </Link>
         ),
       )}
       <div className="pt-2 border-t border-white/10 flex justify-center">
@@ -539,24 +538,19 @@ function MobileDrawer({ departments, pathname, isActive, onPick, onClose }) {
 /**
  * @param {{ departments: {id:string,label:string,desc:string,path:string}[] }} props
  */
-export default function Navbar({ departments = [] }) {
+export default function Navbar({ departments = DEPARTMENT_LINKS }) {
   const { pathname } = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [picked, setPicked] = useState(null);
 
-  useEffect(() => {
-    setMobileOpen(false);
-    setPicked(null);
-  }, [pathname]);
+  useEffect(() => setMobileOpen(false), [pathname]);
 
   const deptActive = departments.some((d) => d.path === pathname);
   const isActive = (item) =>
     item.menu
       ? deptActive
-      : item.to
-        ? item.to === pathname
-        : picked === item.id;
-  const pick = (item) => setPicked(item.id);
+      : pathname === item.to ||
+        pathname.startsWith(`${item.to}/`) ||
+        (item.id === "home" && pathname === "/");
 
   return (
     <header
@@ -587,21 +581,16 @@ export default function Navbar({ departments = [] }) {
               );
             }
             const cls = `${ITEM} ${on ? ITEM_ON : ITEM_OFF}`;
-            return item.to ? (
-              <Link key={item.id} to={item.to} className={cls}>
-                {item.label}
-                {on && <Underline />}
-              </Link>
-            ) : (
-              <button
+            return (
+              <Link
                 key={item.id}
-                type="button"
-                onClick={() => pick(item)}
+                to={item.to}
+                aria-current={on ? "page" : undefined}
                 className={cls}
               >
                 {item.label}
                 {on && <Underline />}
-              </button>
+              </Link>
             );
           })}
         </div>
@@ -639,7 +628,6 @@ export default function Navbar({ departments = [] }) {
           departments={departments}
           pathname={pathname}
           isActive={isActive}
-          onPick={pick}
           onClose={() => setMobileOpen(false)}
         />
       )}

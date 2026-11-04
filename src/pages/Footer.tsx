@@ -56,11 +56,158 @@ function NavDivider() {
   );
 }
 
+const chamfer = (c: number) =>
+  `polygon(0 ${c}px, ${c}px 0, 100% 0, 100% calc(100% - ${c}px), calc(100% - ${c}px) 100%, 0 100%)`;
+
+function Chevron() {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 24 24"
+      fill="none"
+      className="size-5 shrink-0 opacity-60 transition-transform duration-200 group-active:translate-x-0.5"
+    >
+      <path
+        d="M9 5l7 7-7 7"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function MobileFooter() {
+  return (
+    <div className="px-4 pt-8 pb-[max(1.5rem,env(safe-area-inset-bottom))] @min-[1100px]:hidden sm:px-8">
+      <div className="relative mx-auto max-w-xl text-white">
+        {/* chamfered border panel */}
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-[#17543D]"
+          style={{ clipPath: chamfer(22) }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-[1.5px] bg-black"
+          style={{ clipPath: chamfer(21) }}
+        />
+
+        <div className="relative px-5 pt-6 pb-5 sm:px-8 sm:pt-8">
+          {/* slanted ticks (from desktop frame) */}
+          <svg
+            aria-hidden
+            viewBox="0 0 90 12"
+            className="mb-5 h-2.5 w-[72px]"
+            fill="none"
+          >
+            {[0, 19, 38].map((x) => (
+              <path
+                key={x}
+                d={`M${9 + x} 0H${14 + x}L${5 + x} 12H${x}L${9 + x} 0Z`}
+                fill="#00E88F"
+              />
+            ))}
+            {[57, 76].map((x) => (
+              <path
+                key={x}
+                d={`M${9 + x} 0H${14 + x}L${5 + x} 12H${x}L${9 + x} 0Z`}
+                fill="#17543D"
+              />
+            ))}
+          </svg>
+
+          {/* brand row */}
+          <div className="flex items-center gap-4">
+            <FuturisticCard
+              svg={brandLogoSvg}
+              aria-label="Open Minds Club"
+              className="h-[78px] w-[88px] shrink-0 [--fc-b:1.5px] [--fc-br:16px] [--fc-color:#0E7A4D] [--fc-tl:16px]"
+            />
+            <div className="min-w-0 flex-1">
+              <p className="font-jakarta text-[11px] tracking-[0.25em] text-white/50 uppercase">
+                Learn / Build / Grow
+              </p>
+              <div className="mt-3 h-px w-full bg-muted" />
+            </div>
+          </div>
+
+          <h2 className="mt-6 font-orbitron text-[26px] leading-[34px] font-bold text-white/95 italic sm:text-3xl sm:leading-[40px]">
+            Every <span className="text-neon-green">Hunter</span> starts
+            somewhere.
+          </h2>
+
+          {/* nav: native-style list rows */}
+          <nav aria-label="Footer" className="mt-7 font-jakarta">
+            <ul className="border-t border-muted">
+              {navItems.map(({ label, href }) => {
+                const active = href === activeHref;
+                return (
+                  <li key={href} className="border-b border-muted">
+                    <a
+                      href={href}
+                      aria-current={active ? "page" : undefined}
+                      className={`group relative flex min-h-[52px] items-center justify-between gap-3 py-3 pr-1 pl-4 text-[17px] transition-colors duration-150 active:bg-white/5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-neon-green ${
+                        active ? "text-neon-green" : "text-white"
+                      }`}
+                    >
+                      <span
+                        aria-hidden
+                        className={`absolute top-1/2 left-0 h-6 w-[3px] -translate-y-1/2 rounded-full bg-neon-green transition-opacity ${
+                          active ? "opacity-100" : "opacity-0"
+                        }`}
+                      />
+                      {label}
+                      <Chevron />
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          {/* socials */}
+          <div className="mt-7 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+            <p className="font-jakarta text-base tracking-wider text-white">
+              Follow our journey:
+            </p>
+            <div className="flex gap-3">
+              {socials.map(({ label, href, svg }) => (
+                <a
+                  key={label}
+                  href={href}
+                  aria-label={label}
+                  className="group inline-flex rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon-green"
+                >
+                  <FuturisticCard
+                    svg={svg}
+                    className="size-12 text-white transition-colors duration-200 [--fc-b:1.5px] [--fc-br:10px] [--fc-color:var(--color-card-footer)] [--fc-tl:7px] group-active:text-neon-green group-active:[--fc-color:var(--color-neon-green)]"
+                  />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* bottom bar */}
+          <div className="mt-7 flex flex-col items-center gap-3 border-t border-muted pt-5 sm:flex-row sm:justify-between">
+            <p className="text-center font-jakarta text-[11px] tracking-[0.15em] text-white/60">
+              Open Minds Club · 2026–2027
+            </p>
+            <BatteryLoader bars={6} className="h-3 w-[72px]" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Footer() {
   return (
     <footer className="@container w-full bg-black">
+      <MobileFooter />
       <div
-        className="mx-auto w-full max-w-[1920px]"
+        className="mx-auto hidden w-full max-w-[1920px] @min-[1100px]:block"
         style={{ "--u": "min(1px, calc(100cqw / 1920))" } as CSSProperties}
       >
         <FooterBackgroundDesktop

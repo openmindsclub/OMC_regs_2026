@@ -4,6 +4,7 @@ import AboutUs from "./components/screens/AboutUs";
 import RegisterationForm from "./components/screens/RegisterationForm";
 
 import Footer from "./pages/Footer.js";
+import Home from "./pages/Home.jsx";
 
 export function App() {
   return (
@@ -12,7 +13,7 @@ export function App() {
         {departmentRoutes}
         <Route path="/about" element={<AboutUs />} />
         <Route path="/register" element={<RegisterationForm />} />
-       
+        <Route path="/" element={<Home />} />
         <Route path="/footer" element={<Footer />} />
       </Routes>
     </div>

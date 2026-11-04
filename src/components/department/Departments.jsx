@@ -1,19 +1,17 @@
 import { useId, useLayoutEffect, useRef, useState } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Link, Navigate, Route, Routes } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import Navbar, { RegistrationButton } from "./Navbar";
+import { DEPARTMENT_LINKS } from "./DepartmentLinks";
 
 gsap.registerPlugin(useGSAP);
 
 const POSTER = (name) => `/posters/${name}.avif`;
 
-const DEPARTMENTS = [
+const CONTENT = [
   {
     id: "design",
-    path: "/design",
-    label: "DESIGN",
-    desc: "Graphic & UI/UX",
     heading: "Design — The Power to Transform",
     intro: [
       "Think creatively, experiment boldly, and surprise with every design.",
@@ -31,9 +29,6 @@ const DEPARTMENTS = [
   },
   {
     id: "multimedia",
-    path: "/multimedia",
-    label: "MULTIMEDIA",
-    desc: "Videography & Editing",
     heading: "Multimedia — The Power to Capture",
     intro: [
       "Capture moments and bring stories to life through photography, filming.",
@@ -50,9 +45,6 @@ const DEPARTMENTS = [
   },
   {
     id: "marketing",
-    path: "/marketing",
-    label: "MARKETING",
-    desc: "Brand & Market Strategy",
     heading: "Marketing — The Power to Influence",
     intro: ["Plan strategically, know your audience, and shape your message."],
     specializations: [
@@ -67,9 +59,6 @@ const DEPARTMENTS = [
   },
   {
     id: "it",
-    path: "/it",
-    label: "IT",
-    desc: "AI, Web & Security",
     heading: "IT — The Power to Build",
     intro: [
       "Explore AI, cybersecurity, web development, and mobile development to build, protect.",
@@ -87,9 +76,6 @@ const DEPARTMENTS = [
   },
   {
     id: "hr",
-    path: "/hr",
-    label: "HUMAN RESOURCES",
-    desc: "Unity & Member Relations",
     heading: "Human Resources — The Power of Unity",
     intro: [
       "Welcome members, HR is part of OMC but is not open for selection in this recruitment.",
@@ -106,9 +92,6 @@ const DEPARTMENTS = [
   },
   {
     id: "b2b",
-    path: "/b2b",
-    label: "B2B",
-    desc: "Partners & Sponsorships",
     heading: "B2B — The Power to Connect",
     intro: [
       "Precision, strategy, and purpose.",
@@ -125,6 +108,11 @@ const DEPARTMENTS = [
     },
   },
 ];
+
+const DEPARTMENTS = DEPARTMENT_LINKS.map((link) => ({
+  ...link,
+  ...CONTENT.find((c) => c.id === link.id),
+}));
 
 const GLASS_BLUR = "blur(8px)";
 const GLASS_FILL =
@@ -342,7 +330,29 @@ const ACCENT_STRIPES = [
   "M13.4568 168.382L22.8334 168.38L9.50586 187.108L0 187.116L13.4568 168.382Z",
 ];
 
-function CenterAccent() {
+function CycleButton({ to, dir, label }) {
+  const next = dir === "next";
+  return (
+    <Link
+      to={to}
+      aria-label={label}
+      title={label}
+      className="pointer-events-auto group grid place-items-center rounded-full border border-white/40 bg-black/30 size-[clamp(30px,2.9vw,46px)] transition-all duration-200 hover:border-green-400 hover:bg-green-400/10 hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        className={`size-[40%] fill-white transition-colors duration-200 group-hover:fill-green-400 ${
+          next ? "translate-x-[8%]" : "-translate-x-[8%] -scale-x-100"
+        }`}
+      >
+        <path d="M8 5.5v13a.8.8 0 0 0 1.2.7l10.4-6.5a.8.8 0 0 0 0-1.4L9.2 4.8A.8.8 0 0 0 8 5.5z" />
+      </svg>
+    </Link>
+  );
+}
+
+function CenterAccent({ prev, next }) {
   const uid = useId().replace(/:/g, "");
   const clip = `${uid}-aclip`;
   const rim = `${uid}-arim`;
@@ -354,8 +364,23 @@ function CenterAccent() {
       >
         <Glass clipId={clip} />
       </div>
+      <div
+        className="absolute inset-x-0 top-0 flex items-center justify-between px-[27%]"
+        style={{ height: `${(152 / 188) * 100}%` }}
+      >
+        <CycleButton
+          dir="prev"
+          to={prev.path}
+          label={`Previous department: ${prev.label}`}
+        />
+        <CycleButton
+          dir="next"
+          to={next.path}
+          label={`Next department: ${next.label}`}
+        />
+      </div>
       <svg
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full pointer-events-none"
         viewBox="0 0 412 188"
         fill="none"
         aria-hidden="true"
@@ -399,6 +424,9 @@ const INTRO_SEQUENCE = [
 function DepartmentPage({ dept }) {
   const root = useRef(null);
   const { video, poster, title } = dept.media;
+  const i = DEPARTMENTS.findIndex((d) => d.id === dept.id);
+  const prev = DEPARTMENTS[(i - 1 + DEPARTMENTS.length) % DEPARTMENTS.length];
+  const next = DEPARTMENTS[(i + 1) % DEPARTMENTS.length];
 
   useGSAP(
     () => {
@@ -435,7 +463,7 @@ function DepartmentPage({ dept }) {
         <source src={video} type="video/mp4" />
       </video>
 
-      <Navbar departments={DEPARTMENTS} />
+      <Navbar />
 
       <main className="relative z-20 flex-1 w-full px-3 sm:px-6 lg:px-8 xl:px-12 py-4 sm:py-6 md:py-2 md:min-h-0 flex flex-col justify-center">
         <div className="max-w-[1680px] mx-auto w-full">
@@ -456,7 +484,7 @@ function DepartmentPage({ dept }) {
               <img
                 src={title}
                 alt={dept.label}
-                className="w-full h-auto md:w-auto md:h-[min(25vh,270px)] md:max-w-[min(36vw,680px)] md:object-contain md:object-left-top drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
+                className="w-full h-auto md:w-auto md:h-[min(32vh,340px)] md:max-w-[min(42vw,780px)] md:object-contain md:object-left-top drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)]"
               />
             </div>
           </div>
@@ -473,7 +501,7 @@ function DepartmentPage({ dept }) {
           </div>
           <div className="hidden md:flex absolute inset-x-0 bottom-[0.6vw] justify-center pointer-events-none z-10">
             <div data-anim="center-accent" className="w-[24.4%] max-w-[420px]">
-              <CenterAccent />
+              <CenterAccent prev={prev} next={next} />
             </div>
           </div>
           <div
