@@ -139,21 +139,14 @@ const empty: Data = {
 };
 
 function useStoredData() {
-  const [data, setData] = useState<Data>(() => {
-    try {
-      const raw = sessionStorage.getItem(KEY);
-      return raw ? { ...empty, ...JSON.parse(raw) } : empty;
-    } catch {
-      return empty;
-    }
-  });
+  const [data, setData] = useState<Data>(empty);
 
   useEffect(() => {
     try {
-      sessionStorage.setItem(KEY, JSON.stringify(data));
+      sessionStorage.removeItem(KEY);
     } catch {
     }
-  }, [data]);
+  }, []);
 
   const update = (patch: Partial<Data>) => setData((d) => ({ ...d, ...patch }));
 
@@ -558,7 +551,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
         id="name"
         label="Full Name"
         required
-        autoComplete="name"
+        autoComplete="off"
         icon={<User size={iconSize} />}
         placeholder="Enter your full name"
         {...field("name")}
@@ -568,7 +561,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
         label="Phone number"
         type="tel"
         required
-        autoComplete="tel"
+        autoComplete="off"
         icon={<Phone size={iconSize} />}
         placeholder="Enter your phone number"
         {...field("phone")}
@@ -578,7 +571,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
         label="Email Address"
         type="email"
         required
-        autoComplete="email"
+        autoComplete="off"
         icon={<Mail size={iconSize} />}
         placeholder="Enter your email address"
         {...field("email")}
@@ -784,6 +777,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
         >
           <form
             id="register-form"
+            autoComplete="off"
             onSubmit={handleNext}
             className={
               step === 3
@@ -949,7 +943,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
           )}
         </div>
 
-        <form id="register-form" onSubmit={handleNext} className="flex flex-1 flex-col">
+        <form id="register-form" autoComplete="off" onSubmit={handleNext} className="flex flex-1 flex-col">
           {step === 1 && (
             <div className="my-auto flex flex-col gap-4 py-6">
               {identityFields}
