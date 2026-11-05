@@ -7,6 +7,7 @@ import header1 from "../assets/header-1.svg";
 import header2 from "../assets/header-2.svg";
 import loopVideo from "../assets/loop.mp4";
 import AboutUs from "../components/screens/AboutUs";
+import DepartmentsSection from "../components/screens/DepartmentsSection";
 import Footer from "./Footer";
 
 // Exam countdown: November 8th 2026, 9 PM (GMT+1)
@@ -328,6 +329,7 @@ export default function Home() {
       {/* ================= NEXT SECTIONS ================= */}
       <Countdown />
       <AboutUs></AboutUs>
+      <DepartmentsSection></DepartmentsSection>
       <Footer></Footer>
     </main>
   );
