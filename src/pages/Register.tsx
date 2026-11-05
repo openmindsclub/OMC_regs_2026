@@ -9,7 +9,7 @@ export default function Register() {
       <div className="relative z-30">
         <Navbar departments={DEPARTMENT_LINKS} />
       </div>
-      <div className="flex-1 py-4 md:py-8 flex flex-col items-center justify-center">
+      <div className="flex-1 w-full flex flex-col items-center justify-center">
         <RegisterationForm />
       </div>
       <Footer />

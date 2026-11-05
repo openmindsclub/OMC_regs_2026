@@ -12,7 +12,7 @@ type Props = React.ComponentPropsWithoutRef<"input"> & {
 export default function FormField({ label, icon, id, ...inputProps }: Props) {
   return (
     <div className="w-full">
-      <label htmlFor={id} className="mb-1 block pl-8 text-xs font-medium text-white">
+      <label htmlFor={id} className="mb-0.5 block pl-8 text-xs font-medium text-white">
         {label}
       </label>
 
@@ -23,7 +23,7 @@ export default function FormField({ label, icon, id, ...inputProps }: Props) {
           borderStyle: "solid",
           borderWidth: `${fieldWidth.top}px ${fieldWidth.right}px ${fieldWidth.bottom}px ${fieldWidth.left}px`,
           borderImage: `url("${fieldFrameSrc}") ${fieldSlice.top} ${fieldSlice.right} ${fieldSlice.bottom} ${fieldSlice.left} fill / ${fieldWidth.top}px ${fieldWidth.right}px ${fieldWidth.bottom}px ${fieldWidth.left}px stretch`,
-          padding: "4px 8px 4px 0",
+          padding: "2px 8px 2px 0",
         }}
       >
         <span className="shrink-0 text-[#00f66a]">{icon}</span>
