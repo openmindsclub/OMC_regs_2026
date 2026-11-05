@@ -5,12 +5,16 @@ import AboutUsFramePhone from "../frames/about-us/AboutUsFramePhone";
 
 export default function AboutUsMobile() {
   return (
-    <section id="about" className="block min-h-svh lg:hidden">
+    <section className="block min-h-svh lg:hidden">
       <AboutUsFramePhone className="min-h-svh flex flex-col text-white gap-8">
         <div className="flex flex-col gap-3">
           <div className="font-chakra font-bold italic text-3xl">
             <h2>Welcome to the</h2>
-            <img src="/association.png" alt="Association" className="max-w-full h-auto" />
+            <img
+              src="/association.png"
+              alt="Association"
+              className="max-w-full h-auto"
+            />
           </div>
           <div className="flex flex-wrap gap-3 justify-between items-center my-4">
             <span className="text-sm relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:bg-linear-to-r after:from-white after:to-transparent">
@@ -34,7 +38,11 @@ export default function AboutUsMobile() {
           </p>
         </div>
         <div className="relative aspect-square w-full max-w-sm shrink-0 self-center">
-          <img src="/Spiders.svg" alt="" className="absolute top-0 right-0 -z-1" />
+          <img
+            src="/Spiders.svg"
+            alt=""
+            className="absolute top-0 right-0 -z-1"
+          />
           <img src="/nen-circle.svg" alt="" className="absolute inset-0" />
           <img
             src="/Symbols.svg"
@@ -42,14 +50,21 @@ export default function AboutUsMobile() {
             className="absolute right-0 top-1/3 opacity-60 scale-50 -z-1"
           />
         </div>
-        <Link to="/design" className="self-center transition-transform duration-200 active:scale-95">
+        <Link
+          to="/design"
+          className="self-center transition-transform duration-200 active:scale-95"
+        >
           <AboutUsFrameCTA className="hover:cursor-pointer">
             <div className="flex items-center gap-3 px-4 py-2.5 font-orbitron">
               <img src="/Arrow.svg" alt="" className="h-3.5 w-auto shrink-0" />
               <div className="flex flex-col items-start font-black text-white text-xs leading-none tracking-widest">
                 <span>EXPLORE</span>
               </div>
-              <img src="/neon-bevel.svg" alt="" className="h-6 w-auto shrink-0 ml-2" />
+              <img
+                src="/neon-bevel.svg"
+                alt=""
+                className="h-6 w-auto shrink-0 ml-2"
+              />
             </div>
           </AboutUsFrameCTA>
         </Link>

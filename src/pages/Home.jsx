@@ -66,6 +66,7 @@ function Countdown() {
 
   return (
     <section
+      id="cooldown"
       aria-label="Countdown to the Hunter Exam"
       className="w-full bg-black px-4 py-10 md:px-10 md:py-16"
     >
@@ -138,7 +139,7 @@ function Countdown() {
         </div>
 
         {/* ---- Content ---- */}
-        <h2 className="font-jakarta text-center text-[6.5vw] font-bold leading-tight text-white md:text-[3vw]">
+        <h2 className="font-chakra text-center text-[6.5vw] font-bold italic leading-tight text-white md:text-[3vw]">
           Hunter Exam Registration Closes In:
         </h2>
 

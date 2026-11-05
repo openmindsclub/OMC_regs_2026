@@ -5,7 +5,7 @@ import AboutUsFrameDesktop from "../frames/about-us/AboutUsFrameDesktop";
 
 export default function AboutUsDesktop() {
   return (
-    <section id="about" className="hidden min-h-screen lg:block">
+    <section className="hidden min-h-screen lg:block">
       <AboutUsFrameDesktop className="relative min-h-screen flex items-center text-white">
         <div className="flex flex-row text-white items-center gap-[clamp(1rem,3vw,4rem)]">
           <img
@@ -17,7 +17,11 @@ export default function AboutUsDesktop() {
             <div className="flex flex-col gap-4">
               <div className="font-chakra font-bold italic text-[clamp(1.75rem,3.5vw,3rem)]">
                 <h2>Welcome to the</h2>
-                <img src="/association-hd.png" alt="Association" className="max-w-full h-auto" />
+                <img
+                  src="/association-hd.png"
+                  alt="Association"
+                  className="max-w-full h-auto"
+                />
               </div>
               <span className="flex flex-wrap gap-6 items-center w-fit max-w-full my-4 text-[clamp(1.1rem,2vw,1.875rem)] font-semibold tracking-[25%] italic relative after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:bg-linear-to-r after:from-white after:to-transparent">
                 SO YOU WANNA BE A HUNTER?
@@ -43,14 +47,25 @@ export default function AboutUsDesktop() {
                 ambitions.
               </p>
             </div>
-            <Link to="/design" className="inline-block transition-transform duration-200 active:scale-95">
+            <Link
+              to="/design"
+              className="inline-block transition-transform duration-200 active:scale-95"
+            >
               <AboutUsFrameCTA className="hover:cursor-pointer">
                 <div className="flex items-center gap-3 sm:gap-4 px-5 py-3 font-orbitron">
-                  <img src="/Arrow.svg" alt="" className="h-4 w-auto shrink-0 transition-transform duration-200 group-hover:translate-x-1" />
+                  <img
+                    src="/Arrow.svg"
+                    alt=""
+                    className="h-4 w-auto shrink-0 transition-transform duration-200 group-hover:translate-x-1"
+                  />
                   <div className="flex flex-col items-start font-black text-white text-sm sm:text-base lg:text-lg leading-none tracking-widest">
                     <span>EXPLORE</span>
                   </div>
-                  <img src="/neon-bevel.svg" alt="" className="h-7 lg:h-8 w-auto shrink-0 ml-3 sm:ml-4" />
+                  <img
+                    src="/neon-bevel.svg"
+                    alt=""
+                    className="h-7 lg:h-8 w-auto shrink-0 ml-3 sm:ml-4"
+                  />
                 </div>
               </AboutUsFrameCTA>
             </Link>

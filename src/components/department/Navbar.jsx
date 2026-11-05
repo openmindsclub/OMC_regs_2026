@@ -273,6 +273,31 @@ const REG = {
     "M49.7417 2.17709C54.8923 2.06202 60.5098 2.17579 65.692 2.17579L97.447 2.17566L104.337 9.25854L213.981 9.24893L220.928 2.17748L237.005 2.17735L237.011 71.6908L210.514 71.6947L140.795 71.6843L134.083 65.0335L33.6234 65.0296C29.426 56.5874 25.4227 47.9456 21.3186 39.4352C19.9176 36.5302 17.8027 32.5535 16.7148 29.5898C16.5095 29.0303 16.2947 24.0374 16.2459 23.1242L15.5811 10.2944C18.9041 9.65557 23.414 8.44008 26.7992 7.63292L49.7417 2.17709Z",
 };
 
+const REG_ANIM_CSS = `
+@keyframes reg-shine-sweep {
+  0%   { transform: translateX(-60px); opacity: 0; }
+  8%   { opacity: 1; }
+  40%  { transform: translateX(285px); opacity: 1; }
+  41%, 100% { transform: translateX(285px); opacity: 0; }
+}
+@keyframes reg-bar-glow {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(74,222,128,0)); }
+  50%      { filter: drop-shadow(0 0 5px rgba(74,222,128,.95)); }
+}
+@keyframes reg-bracket-flash {
+  0%, 100% { fill: #fdfdfd; stroke: #fff; }
+  50%      { fill: #4ade80; stroke: #4ade80; }
+}
+.reg-shine   { animation: reg-shine-sweep 3.6s ease-in-out infinite; }
+.reg-bar     { animation: reg-bar-glow 2.2s ease-in-out infinite; }
+.reg-bracket { animation: reg-bracket-flash 2.2s ease-in-out infinite; }
+.group:hover .reg-shine { animation-duration: 1.4s; }
+@media (prefers-reduced-motion: reduce) {
+  .reg-shine, .reg-bar, .reg-bracket { animation: none; }
+  .reg-shine { opacity: 0; }
+}
+`;
+
 function RegistrationButton({
   className = "",
   children = "Registration",
@@ -281,6 +306,8 @@ function RegistrationButton({
   const uid = useId().replace(/:/g, "");
   const maskId = `reg-mask-${uid}`;
   const clipId = `reg-clip-${uid}`;
+  const shineClipId = `reg-shine-clip-${uid}`;
+  const shineGradId = `reg-shine-grad-${uid}`;
 
   return (
     <Link
@@ -288,13 +315,14 @@ function RegistrationButton({
       className={`relative inline-flex items-center justify-center group cursor-pointer ${className}`}
       {...props}
     >
+      <style>{REG_ANIM_CSS}</style>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 253 74"
         fill="none"
-        className="w-36 md:w-44 h-auto"
+        className="w-36 md:w-44 h-auto transition-transform duration-300 group-hover:scale-105"
       >
-        <path d={REG.bar} fill="#FDFDFD" />
+        <path d={REG.bar} fill="#FDFDFD" className="reg-bar" />
         <mask
           id={maskId}
           maskUnits="userSpaceOnUse"
@@ -335,8 +363,25 @@ function RegistrationButton({
           fill="#FDFDFD"
           strokeWidth="0.847458"
           stroke="white"
+          className="reg-bracket"
         />
+        {/* light sweep, clipped to the button outline */}
+        <g clipPath={`url(#${shineClipId})`} style={{ pointerEvents: "none" }}>
+          <polygon
+            points="22,-2 48,-2 26,76 0,76"
+            fill={`url(#${shineGradId})`}
+            className="reg-shine"
+          />
+        </g>
         <defs>
+          <clipPath id={shineClipId}>
+            <path d={REG.outline} />
+          </clipPath>
+          <linearGradient id={shineGradId} x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stopColor="#4ade80" stopOpacity="0" />
+            <stop offset="0.5" stopColor="#ffffff" stopOpacity="0.55" />
+            <stop offset="1" stopColor="#4ade80" stopOpacity="0" />
+          </linearGradient>
           <clipPath id={clipId} transform="translate(18.3172 31.7727)">
             <path d={REG.blurClip} />
           </clipPath>
@@ -349,13 +394,12 @@ function RegistrationButton({
   );
 }
 
-
 const NAV_ITEMS = [
   { id: "home", to: "/", label: "HOME" },
-  { id: "about", to: "/about", label: "ABOUT" },
+  { id: "cooldown", scroll: "cooldown", label: "COOLDOWN" },
   { id: "department", label: "DEPARTMENTS", menu: true },
-  { id: "application", to: "/register", label: "APPLICATION" },
-  { id: "footer", to: "/#footer", label: "FOOTER" },
+  { id: "about", scroll: "about", label: "ABOUT" },
+  { id: "footer", scroll: "footer", label: "FOOTER" },
 ];
 
 const ITEM =
@@ -461,7 +505,13 @@ function DesktopDepartmentMenu({ label, departments, active, pathname }) {
   );
 }
 
-function MobileDrawer({ departments, pathname, isActive, onClose, onFooterClick }) {
+function MobileDrawer({
+  departments,
+  pathname,
+  isActive,
+  onClose,
+  onScrollClick,
+}) {
   const [deptOpen, setDeptOpen] = useState(false);
   const row = (on) =>
     `flex items-center justify-between text-left text-xs tracking-[0.2em] font-jakarta font-semibold py-2 px-3 rounded-lg transition-colors ${
@@ -512,13 +562,13 @@ function MobileDrawer({ departments, pathname, isActive, onClose, onFooterClick 
               </div>
             )}
           </div>
-        ) : item.id === "footer" ? (
+        ) : item.scroll ? (
           <button
             key={item.id}
             type="button"
             onClick={(e) => {
               onClose();
-              onFooterClick(e);
+              onScrollClick(item.scroll)(e);
             }}
             className={`${row(false)} w-full cursor-pointer`}
           >
@@ -544,19 +594,33 @@ function MobileDrawer({ departments, pathname, isActive, onClose, onFooterClick 
 }
 
 export default function Navbar({ departments = DEPARTMENT_LINKS }) {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   const navigate = useNavigate();
 
-  const handleFooterClick = (e) => {
+  // Smooth-scroll to a section on the current page, or go home first
+  // (then the hash effect below does the scrolling).
+  const scrollToSection = (id) => (e) => {
     if (e && e.preventDefault) e.preventDefault();
-    const footerEl = document.getElementById("footer");
-    if (footerEl) {
-      footerEl.scrollIntoView({ behavior: "smooth", block: "start" });
-      window.history.replaceState(null, "", `${pathname}#footer`);
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.history.replaceState(null, "", `${pathname}#${id}`);
     } else {
-      navigate("/#footer");
+      navigate(`/#${id}`);
     }
   };
+
+  // Arriving on a page with a #hash (e.g. /register -> /#about, or a
+  // direct link) -> scroll to that section once it has rendered.
+  useEffect(() => {
+    if (!hash) return;
+    const t = setTimeout(() => {
+      document
+        .getElementById(hash.slice(1))
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+    return () => clearTimeout(t);
+  }, [pathname, hash]);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => setMobileOpen(false), [pathname]);
@@ -603,13 +667,13 @@ export default function Navbar({ departments = DEPARTMENT_LINKS }) {
                 />
               );
             }
-            if (item.id === "footer") {
+            if (item.scroll) {
               const cls = `${ITEM} ${ITEM_OFF}`;
               return (
                 <button
                   key={item.id}
                   type="button"
-                  onClick={handleFooterClick}
+                  onClick={scrollToSection(item.scroll)}
                   className={cls}
                 >
                   {item.label}
@@ -665,7 +729,7 @@ export default function Navbar({ departments = DEPARTMENT_LINKS }) {
           pathname={pathname}
           isActive={isActive}
           onClose={() => setMobileOpen(false)}
-          onFooterClick={handleFooterClick}
+          onScrollClick={scrollToSection}
         />
       )}
     </header>
