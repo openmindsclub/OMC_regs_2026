@@ -25,12 +25,14 @@
 }
 
 .department-grid {
-  width: calc(100% + 56px);
-  margin-inline: -28px;
+  width: 100%;
+  margin-inline: 0;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 7px;
+  gap: 8px;
   align-items: start;
+  padding: 0 12px;
+  box-sizing: border-box;
 }
 
 .department-item {

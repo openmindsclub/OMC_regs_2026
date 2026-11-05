@@ -787,16 +787,16 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
             onSubmit={handleNext}
             className={
               step === 3
-                ? "department-section flex h-full flex-col justify-between py-2"
+                ? "department-section flex h-full flex-col justify-between pt-5 lg:pt-6 pb-2"
                 : step === 5
-                ? "flex h-full flex-col justify-between py-2"
-                : "mx-auto flex h-full w-full max-w-lg flex-col justify-between px-2 py-1"
+                ? "flex h-full flex-col justify-between pt-5 lg:pt-6 pb-2"
+                : "mx-auto flex h-full w-full max-w-lg flex-col justify-between px-2 pt-5 lg:pt-6 pb-2"
             }
           >
             <header className={`text-center ${step === 3 ? "department-heading" : ""}`}>
               <h1
                 className={`mb-1 font-orbitron font-bold text-white ${
-                  step === 3 ? "text-2xl lg:text-3xl" : step === 5 ? "mt-2 text-2xl lg:text-3xl" : "mt-1 text-2xl lg:text-3xl tracking-wide"
+                  step === 3 ? "text-2xl lg:text-3xl" : step === 5 ? "text-2xl lg:text-3xl" : "text-2xl lg:text-3xl tracking-wide"
                 }`}
               >
                 {config.heading}
