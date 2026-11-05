@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, Phone, Mail, GraduationCap, BookOpen, Building2, ArrowLeft } from "lucide-react";
+import { User, Phone, Mail, GraduationCap, BookOpen, Building2, ArrowLeft, Check } from "lucide-react";
 import RegistrationFrameDesktop from "../frames/registeration/registerationFrameDesktop";
 import FormField from "./FormField";
 import StatusModal, { type ModalType } from "../common/StatusModal";
@@ -49,11 +49,11 @@ const STEPS: Record<
     subtitle: "Which department would you like to join?",
   },
   4: {
-    label: "STAGE 04 — HUNTER REGISTRATION",
+    label: "FINAL STAGE — HUNTER REGISTRATION",
     banner: "/Registration stages4.svg",
     leftPanel: "/stage4.svg",
-    heading: "Your Digital Footprint",
-    subtitle: "Share your professional profiles",
+    heading: "Submit Your File",
+    subtitle: "Your first mission is complete.",
   },
 };
 
@@ -111,9 +111,10 @@ type Data = {
   department: string | null;
   github: string;
   linkedin: string;
+  confirmed: boolean;
 };
 
-type TextKey = Exclude<keyof Data, "department">;
+type TextKey = Exclude<keyof Data, "department" | "confirmed">;
 
 const empty: Data = {
   name: "",
@@ -126,6 +127,7 @@ const empty: Data = {
   department: null,
   github: "",
   linkedin: "",
+  confirmed: false,
 };
 
 function useStoredData() {
@@ -298,6 +300,10 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
       setError("Please choose a department.");
       return;
     }
+    if (!data.confirmed) {
+      setError("Please confirm that your information is accurate before submitting.");
+      return;
+    }
 
     const trimmedName = data.name.trim();
     const nameParts = trimmedName.split(/\s+/);
@@ -440,31 +446,51 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
     </>
   );
 
-  const profileFields = (
-    <>
-      <FormField
-        id="github"
-        label="GitHub Profile (optional)"
-        type="url"
-        icon={<img src="/Github.svg" alt="" className={`${brandIcon} object-contain`} draggable={false} />}
-        placeholder="https://github.com/yourusername"
-        {...field("github")}
-      />
-      <FormField
-        id="linkedin"
-        label="LinkedIn Profile (optional)"
-        type="url"
-        icon={<img src="/Linkedin.svg" alt="" className={`${brandIcon} object-contain`} draggable={false} />}
-        placeholder="https://www.linkedin.com/in/yourprofile"
-        {...field("linkedin")}
-      />
-    </>
-  );
-
   const errorMessage = error && (
     <p role="alert" className="text-center font-orbitron text-xs text-red-400">
       {error}
     </p>
+  );
+
+  const confirmationBlock = (
+    <div className="mx-auto my-auto flex w-full max-w-xl flex-col items-center gap-4 px-2">
+      <div
+        onClick={() => {
+          setError("");
+          update({ confirmed: !data.confirmed });
+        }}
+        className={`group relative flex w-full cursor-pointer items-center gap-4 rounded-xl border bg-[#060c12]/90 p-5 transition-all duration-200 hover:border-[#00f66a] hover:bg-[#09141f] ${
+          data.confirmed
+            ? "border-[#00f66a] shadow-[0_0_25px_rgba(0,246,106,0.3)]"
+            : "border-[#00f66a]/40 shadow-[0_0_12px_rgba(0,246,106,0.1)]"
+        }`}
+        style={{
+          clipPath:
+            "polygon(16px 0%, 100% 0%, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0% 100%, 0% 16px)",
+        }}
+      >
+        <button
+          type="button"
+          role="checkbox"
+          aria-checked={data.confirmed}
+          aria-label="Confirm information accuracy"
+          className={`flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded border transition-all duration-200 ${
+            data.confirmed
+              ? "border-[#00f66a] bg-[#00f66a] text-black shadow-[0_0_10px_#00f66a]"
+              : "border-[#00f66a]/60 bg-transparent text-transparent hover:border-[#00f66a]"
+          }`}
+        >
+          <Check size={16} strokeWidth={3.5} />
+        </button>
+
+        <p className="select-none font-orbitron text-xs sm:text-sm leading-relaxed text-gray-200">
+          I confirm that my information is accurate and understand that it will
+          be used for the OMC recruitment process.
+        </p>
+      </div>
+
+      {errorMessage}
+    </div>
   );
 
   const actions = (
@@ -487,14 +513,19 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
         } ${isSubmitting ? "pointer-events-none opacity-70" : ""}`}
       >
         {isSubmitting ? (
-          <div className="flex h-14 items-center justify-center gap-2.5 rounded-lg border border-[#00f66a]/60 bg-[#0d131a] px-6 font-orbitron text-xs font-bold tracking-wider text-[#00f66a] shadow-[0_0_20px_rgba(0,246,106,0.3)]">
+          <div className="flex h-14 items-center justify-center gap-2.5 rounded-lg border border-[#00f66a]/60 bg-[#0d131a] px-8 font-orbitron text-xs font-bold tracking-wider text-[#00f66a] shadow-[0_0_20px_rgba(0,246,106,0.3)]">
             <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#00f66a] border-t-transparent" />
             TRANSMITTING...
+          </div>
+        ) : step === 4 ? (
+          <div className="group relative flex h-14 min-w-[220px] items-center justify-center gap-3 rounded-xl border border-[#00f66a] bg-black/90 px-10 font-orbitron text-sm font-bold tracking-widest text-[#00f66a] shadow-[0_0_18px_rgba(0,246,106,0.3)] transition-all duration-200 hover:bg-[#00f66a]/15 hover:shadow-[0_0_30px_rgba(0,246,106,0.6)]">
+            <span>SUBMIT</span>
+            <span className="text-base transition-transform duration-200 group-hover:translate-x-1.5">→</span>
           </div>
         ) : (
           <img
             src="/Cybernetic button.svg"
-            alt=""
+            alt="Continue"
             className={`${isDesktop ? "h-16" : "mx-auto h-14"} w-auto object-contain`}
             draggable={false}
           />
@@ -594,9 +625,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
                 {errorMessage}
               </div>
             )}
-            {step === 4 && (
-              <div className="mx-auto my-auto flex w-full max-w-lg flex-col gap-5">{profileFields}</div>
-            )}
+            {step === 4 && confirmationBlock}
 
             <div className="pb-3">{actions}</div>
           </form>
@@ -712,7 +741,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
               <div className="mb-3">{errorMessage}</div>
             </>
           )}
-          {step === 4 && <div className="my-auto flex flex-col gap-4 py-6">{profileFields}</div>}
+          {step === 4 && confirmationBlock}
         </form>
 
         {actions}
