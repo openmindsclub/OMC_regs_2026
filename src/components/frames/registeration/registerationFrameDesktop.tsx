@@ -86,7 +86,7 @@ export default function RegistrationFrameDesktop({
           draggable={false}
         />
 
-        <div className="absolute bottom-[12%] left-[24%] right-[24%] top-[9%]">
+        <div className="absolute bottom-[12%] left-[24%] right-[24%] top-[13.5%]">
           {children}
         </div>
       </div>
