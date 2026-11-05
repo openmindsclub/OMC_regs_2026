@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import NavBar from "../components/department/Navbar"; // adjust relative path to src/components/department/Navbar.jsx
 
-import fallbackImg from "../assets/fallback.png";
+import fallbackImg from "../assets/fallback.webp";
 import header1 from "../assets/header-1.svg";
 import header2 from "../assets/header-2.svg";
 import loopVideo from "../assets/loop.mp4";
