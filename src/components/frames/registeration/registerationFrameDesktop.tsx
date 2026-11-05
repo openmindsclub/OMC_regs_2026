@@ -38,10 +38,13 @@ export default function RegistrationFrameDesktop({
   rightPanel?: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-black">
+    <div className="flex w-full items-center justify-center bg-black py-4">
       <div
-        className="relative h-full max-w-full origin-center scale-105"
-        style={{ aspectRatio: "1139 / 613" }}
+        className="relative origin-center"
+        style={{
+          aspectRatio: "1139 / 613",
+          width: "min(1140px, 95vw, calc((100vh - 150px) * 1139 / 613))",
+        }}
       >
         <img
           src="/frame.svg"

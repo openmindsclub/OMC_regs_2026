@@ -1,0 +1,17 @@
+import Navbar from "../components/department/Navbar";
+import RegisterationForm from "../components/screens/RegisterationForm";
+import Footer from "./Footer";
+
+export default function Register() {
+  return (
+    <main className="min-h-screen bg-black text-white flex flex-col justify-between">
+      <div className="relative z-30">
+        <Navbar />
+      </div>
+      <div className="flex-1 py-4 md:py-8 flex flex-col items-center justify-center">
+        <RegisterationForm />
+      </div>
+      <Footer />
+    </main>
+  );
+}
