@@ -343,16 +343,17 @@ function CycleButton({ to, dir, label }) {
       to={to}
       aria-label={label}
       title={label}
-      className="pointer-events-auto group grid place-items-center rounded-full border border-white/40 bg-black/30 size-[clamp(30px,2.9vw,46px)] transition-all duration-200 hover:border-green-400 hover:bg-green-400/10 hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400"
+      className="pointer-events-auto group grid place-items-center size-[clamp(30px,2.9vw,46px)] transition-transform duration-200 hover:scale-125 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400"
     >
+      {/* Futuristic chunky chevron with flat-cut ends (mirrored for "prev") */}
       <svg
-        viewBox="0 0 24 24"
+        viewBox="0 0 16 22"
         aria-hidden="true"
-        className={`size-[40%] fill-white transition-colors duration-200 group-hover:fill-green-400 ${
+        className={`h-[60%] w-auto fill-white transition-colors duration-200 group-hover:fill-green-400 ${
           next ? "translate-x-[8%]" : "-translate-x-[8%] -scale-x-100"
         }`}
       >
-        <path d="M8 5.5v13a.8.8 0 0 0 1.2.7l10.4-6.5a.8.8 0 0 0 0-1.4L9.2 4.8A.8.8 0 0 0 8 5.5z" />
+        <path d="M0 0H6L16 11L6 22H0L10 11Z" />
       </svg>
     </Link>
   );
