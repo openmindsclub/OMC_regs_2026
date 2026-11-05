@@ -2,7 +2,7 @@ import { useId, useLayoutEffect, useRef, useState } from "react";
 import { Link, Navigate, Route, Routes } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import Navbar, { RegistrationButton } from "./Navbar";
+import Navbar from "./Navbar";
 import { DEPARTMENT_LINKS } from "./DepartmentLinks";
 
 gsap.registerPlugin(useGSAP);
@@ -420,11 +420,6 @@ const INTRO_SEQUENCE = [
     "-=0.5",
   ],
   ["right-card", { x: 60, duration: 0.85, ease: "power2.out" }, "-=0.5"],
-  [
-    "mobile-reg",
-    { y: 20, scale: 0.95, duration: 0.6, ease: "back.out(1.7)" },
-    "-=0.3",
-  ],
 ];
 
 function DepartmentPage({ dept }) {
@@ -455,7 +450,6 @@ function DepartmentPage({ dept }) {
       ref={root}
       className="relative w-full min-h-screen md:h-dvh md:min-h-0 md:overflow-hidden bg-black text-white overflow-x-hidden flex flex-col justify-between selection:bg-green-400 selection:text-black"
     >
-      {/* Background video. `poster` is the fallback while loading or if autoplay is blocked. */}
       <video
         autoPlay
         loop
@@ -487,7 +481,6 @@ function DepartmentPage({ dept }) {
               data-anim="title"
               className="w-full max-w-xl md:max-w-none my-2 sm:my-4 md:my-2"
             >
-              {/* Desktop: width AND height are capped, so the title never pushes the page past one screen. */}
               <img
                 src={title}
                 alt={dept.label}
@@ -498,7 +491,7 @@ function DepartmentPage({ dept }) {
         </div>
       </main>
 
-      <footer className="relative z-30 w-full px-3 sm:px-6 lg:px-8 xl:px-12 pt-2 pb-6 md:pb-5 lg:pb-6">
+      <footer className="relative z-30 w-full px-3 sm:px-6 lg:px-8 xl:px-12 pt-2 pb-4 md:pb-5 lg:pb-6">
         <div className="relative max-w-[1680px] mx-auto w-full flex flex-col items-center gap-3.5 sm:gap-4 md:grid md:grid-cols-[minmax(0,1fr)_15.5%_minmax(0,1fr)] md:items-stretch md:gap-0">
           <div data-anim="left-card" className="w-full min-w-0 md:col-start-1">
             <IntroCard dept={dept} />
@@ -510,12 +503,6 @@ function DepartmentPage({ dept }) {
             <div data-anim="center-accent" className="w-[24.4%] max-w-[420px]">
               <CenterAccent prev={prev} next={next} />
             </div>
-          </div>
-          <div
-            data-anim="mobile-reg"
-            className="flex md:hidden justify-center w-full pt-2 pb-4"
-          >
-            <RegistrationButton />
           </div>
         </div>
       </footer>
