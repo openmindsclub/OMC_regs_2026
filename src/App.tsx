@@ -15,7 +15,6 @@ export function App() {
         <Route path="/about" element={<About />} />
         <Route path="/register" element={<Register />} />
         <Route path="/application" element={<Navigate to="/register" replace />} />
-        <Route path="/build" element={<Navigate to="/it" replace />} />
         <Route path="/teams" element={<Navigate to="/design" replace />} />
         <Route path="/departments" element={<Navigate to="/design" replace />} />
         <Route path="/" element={<Home />} />

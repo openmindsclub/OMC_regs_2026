@@ -356,9 +356,9 @@ function RegistrationButton({
 const NAV_ITEMS = [
   { id: "home", to: "/", label: "HOME" },
   { id: "about", to: "/about", label: "ABOUT" },
-  { id: "department", label: "DEPARTMENT", menu: true },
-  { id: "build", to: "/it", label: "BUILD" },
+  { id: "department", label: "DEPARTMENTS", menu: true },
   { id: "application", to: "/register", label: "APPLICATION" },
+  { id: "footer", to: "/footer", label: "FOOTER" },
 ];
 
 const ITEM =

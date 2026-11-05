@@ -32,7 +32,6 @@ const navItems = [
   { label: "Home", to: "/" },
   { label: "About OMC", to: "/about" },
   { label: "Departments", to: "/design" },
-  { label: "IT Path", to: "/it" },
   { label: "Take the Exam", to: "/register" },
 ];
 
