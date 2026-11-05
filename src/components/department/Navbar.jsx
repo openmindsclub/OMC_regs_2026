@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { DEPARTMENT_LINKS } from "./DepartmentLinks";
 
 function HunterLogo({ className = "h-9 sm:h-10 w-auto" }) {
@@ -349,16 +349,13 @@ function RegistrationButton({
   );
 }
 
-/* ────────────────────────────────────────────────────────────────────────────
-   Navbar
-   ──────────────────────────────────────────────────────────────────────────── */
 
 const NAV_ITEMS = [
   { id: "home", to: "/", label: "HOME" },
   { id: "about", to: "/about", label: "ABOUT" },
   { id: "department", label: "DEPARTMENTS", menu: true },
   { id: "application", to: "/register", label: "APPLICATION" },
-  { id: "footer", to: "/footer", label: "FOOTER" },
+  { id: "footer", to: "/#footer", label: "FOOTER" },
 ];
 
 const ITEM =
@@ -407,7 +404,6 @@ function DesktopDepartmentMenu({ label, departments, active, pathname }) {
     };
   }, [open]);
 
-  // Hover only for real mice — on touch, hover + click used to fight and close the menu.
   const hover = (value) => (e) => e.pointerType === "mouse" && setOpen(value);
 
   return (
@@ -465,7 +461,7 @@ function DesktopDepartmentMenu({ label, departments, active, pathname }) {
   );
 }
 
-function MobileDrawer({ departments, pathname, isActive, onClose }) {
+function MobileDrawer({ departments, pathname, isActive, onClose, onFooterClick }) {
   const [deptOpen, setDeptOpen] = useState(false);
   const row = (on) =>
     `flex items-center justify-between text-left text-xs tracking-[0.2em] font-jakarta font-semibold py-2 px-3 rounded-lg transition-colors ${
@@ -516,6 +512,18 @@ function MobileDrawer({ departments, pathname, isActive, onClose }) {
               </div>
             )}
           </div>
+        ) : item.id === "footer" ? (
+          <button
+            key={item.id}
+            type="button"
+            onClick={(e) => {
+              onClose();
+              onFooterClick(e);
+            }}
+            className={`${row(false)} w-full cursor-pointer`}
+          >
+            {item.label}
+          </button>
         ) : (
           <Link
             key={item.id}
@@ -535,11 +543,20 @@ function MobileDrawer({ departments, pathname, isActive, onClose }) {
   );
 }
 
-/**
- * @param {{ departments: {id:string,label:string,desc:string,path:string}[] }} props
- */
 export default function Navbar({ departments = DEPARTMENT_LINKS }) {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const handleFooterClick = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const footerEl = document.getElementById("footer");
+    if (footerEl) {
+      footerEl.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.history.replaceState(null, "", `${pathname}#footer`);
+    } else {
+      navigate("/#footer");
+    }
+  };
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => setMobileOpen(false), [pathname]);
@@ -578,6 +595,19 @@ export default function Navbar({ departments = DEPARTMENT_LINKS }) {
                   active={on}
                   pathname={pathname}
                 />
+              );
+            }
+            if (item.id === "footer") {
+              const cls = `${ITEM} ${ITEM_OFF}`;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={handleFooterClick}
+                  className={cls}
+                >
+                  {item.label}
+                </button>
               );
             }
             const cls = `${ITEM} ${on ? ITEM_ON : ITEM_OFF}`;
@@ -629,6 +659,7 @@ export default function Navbar({ departments = DEPARTMENT_LINKS }) {
           pathname={pathname}
           isActive={isActive}
           onClose={() => setMobileOpen(false)}
+          onFooterClick={handleFooterClick}
         />
       )}
     </header>
