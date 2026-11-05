@@ -32,7 +32,6 @@ const navItems = [
   { label: "Home", to: "/" },
   { label: "About OMC", to: "/about" },
   { label: "Departments", to: "/design" },
-  { label: "IT Path", to: "/it" },
   { label: "Take the Exam", to: "/register" },
 ];
 
@@ -215,7 +214,7 @@ export default function Footer() {
   const { pathname } = useLocation();
 
   return (
-    <footer className="@container w-full bg-black">
+    <footer id="footer" className="@container w-full bg-black">
       <MobileFooter />
       <div
         className="mx-auto hidden w-full max-w-[1920px] @min-[1100px]:block"

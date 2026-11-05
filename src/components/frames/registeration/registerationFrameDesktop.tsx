@@ -38,12 +38,13 @@ export default function RegistrationFrameDesktop({
   rightPanel?: React.ReactNode;
 }) {
   return (
-    <div className="flex w-full items-center justify-center bg-black py-4">
+    <div className="flex w-full items-center justify-center bg-black py-4 lg:py-8 overflow-x-hidden">
       <div
-        className="relative origin-center"
+        className="relative origin-center shrink-0"
         style={{
           aspectRatio: "1139 / 613",
-          width: "min(1140px, 95vw, calc((100vh - 150px) * 1139 / 613))",
+          width: "min(1540px, 96vw)",
+          minWidth: "1024px",
         }}
       >
         <img
@@ -85,7 +86,7 @@ export default function RegistrationFrameDesktop({
           draggable={false}
         />
 
-        <div className="absolute bottom-[12%] left-[24%] right-[24%] top-[9%]">
+        <div className="absolute bottom-[12%] left-[24%] right-[24%] top-[13.5%]">
           {children}
         </div>
       </div>

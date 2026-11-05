@@ -177,7 +177,7 @@ function LevelSelect({
 }) {
   return (
     <div className="w-full">
-      <label htmlFor="level" className="mb-1 block pl-8 text-xs font-medium text-white">
+      <label htmlFor="level" className="mb-0.5 block pl-8 text-xs font-medium text-white">
         Current level of study
       </label>
       <div
@@ -187,7 +187,7 @@ function LevelSelect({
           borderStyle: "solid",
           borderWidth: `${fieldWidth.top}px ${fieldWidth.right}px ${fieldWidth.bottom}px ${fieldWidth.left}px`,
           borderImage: `url("${fieldFrameSrc}") ${fieldSlice.top} ${fieldSlice.right} ${fieldSlice.bottom} ${fieldSlice.left} fill / ${fieldWidth.top}px ${fieldWidth.right}px ${fieldWidth.bottom}px ${fieldWidth.left}px stretch`,
-          padding: "4px 8px 4px 0",
+          padding: "2px 8px 2px 0",
         }}
       >
         <span className="shrink-0 text-[#00f66a]">
@@ -255,7 +255,7 @@ function CyberneticSubmitButton({
   isSubmitting: boolean;
 }) {
   return (
-    <div className={`relative flex items-center justify-center ${isDesktop ? "h-16" : "h-14"} w-auto`}>
+    <div className={`relative flex items-center justify-center ${isDesktop ? "h-14 lg:h-15" : "h-14"} w-auto`}>
       <svg
         className="h-full w-auto"
         viewBox="0 0 354 103"
@@ -685,7 +685,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
   );
 
   const actions = (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex flex-col items-center gap-1.5">
       {step > 1 && (
         <button
           type="button"
@@ -709,7 +709,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
           <img
             src="/Cybernetic button.svg"
             alt="Continue"
-            className={`${isDesktop ? "h-16" : "mx-auto h-14"} w-auto object-contain`}
+            className={`${isDesktop ? "h-14 lg:h-15" : "mx-auto h-14"} w-auto object-contain`}
             draggable={false}
           />
         )}
@@ -751,7 +751,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
     });
 
     return (
-      <section className="h-screen bg-black">
+      <section className="w-full bg-black py-4 flex flex-col items-center justify-center">
         <RegistrationFrameDesktop
           leftPanel={
             step === 5 ? (
@@ -787,31 +787,31 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
             onSubmit={handleNext}
             className={
               step === 3
-                ? "department-section flex h-full flex-col justify-between py-4"
+                ? "department-section flex h-full flex-col justify-between pt-1 pb-2"
                 : step === 5
-                ? "flex h-full flex-col justify-between py-4"
-                : "mx-auto flex h-full w-full max-w-lg flex-col justify-between px-2 py-2"
+                ? "flex h-full flex-col justify-between pt-1 pb-2"
+                : "mx-auto flex h-full w-full max-w-lg flex-col justify-between px-2 pt-1 pb-2"
             }
           >
             <header className={`text-center ${step === 3 ? "department-heading" : ""}`}>
               <h1
                 className={`mb-1 font-orbitron font-bold text-white ${
-                  step === 3 ? "text-3xl" : step === 5 ? "mt-5 text-3xl" : "mt-6 text-4xl tracking-wide"
+                  step === 3 ? "text-2xl lg:text-3xl" : step === 5 ? "text-2xl lg:text-3xl" : "text-2xl lg:text-3xl tracking-wide"
                 }`}
               >
                 {config.heading}
               </h1>
-              <p className={`text-[#00f66a] ${step === 3 || step === 5 ? "text-xs" : "text-sm"}`}>{config.subtitle}</p>
+              <p className={`text-[#00f66a] ${step === 3 || step === 5 ? "text-xs" : "text-xs lg:text-sm"}`}>{config.subtitle}</p>
             </header>
 
             {step === 1 && (
-              <div className="my-auto flex flex-col gap-4">
+              <div className="my-auto flex flex-col gap-2.5 lg:gap-3">
                 {identityFields}
                 {errorMessage}
               </div>
             )}
             {step === 2 && (
-              <div className="my-auto flex flex-col gap-4">
+              <div className="my-auto flex flex-col gap-2.5 lg:gap-3.5">
                 {academicFields}
                 {errorMessage}
               </div>
@@ -823,14 +823,14 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
               </div>
             )}
             {step === 4 && (
-              <div className="my-auto flex flex-col gap-6">
+              <div className="my-auto flex flex-col gap-5">
                 {profileFields}
                 {errorMessage}
               </div>
             )}
             {step === 5 && confirmationBlock}
 
-            <div className="pb-3">{actions}</div>
+            <div className="pb-2">{actions}</div>
           </form>
         </RegistrationFrameDesktop>
 
@@ -898,9 +898,9 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
   });
 
   return (
-    <section className="min-h-screen bg-black p-3 text-white">
+    <section className="w-full bg-black p-3 text-white flex flex-col items-center justify-center">
       <div
-        className="mx-auto flex min-h-[calc(100vh-1.5rem)] w-full max-w-[430px] flex-col"
+        className="mx-auto flex w-full max-w-[430px] flex-col"
         style={{
           boxSizing: "border-box",
           minWidth: mobileSlice.left + mobileSlice.right,
@@ -932,7 +932,21 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
             </div>
           )}
 
-          <img src={config.banner} alt={`Registration Stage ${step}`} className="mt-4 w-full" draggable={false} />
+          {step === 5 ? (
+            <div className="mt-4 rounded-xl border border-[#00f66a]/30 bg-[#060c12]/90 p-5 font-orbitron shadow-[0_0_18px_rgba(0,246,106,0.12)]">
+              <h2 className="text-xs font-bold leading-relaxed tracking-widest text-[#d8d7d7]">
+                FINAL STAGE —<br />HUNTER REGISTRATION
+              </h2>
+              <p className="mt-4 text-xs leading-relaxed text-[#d8d7d7]/80">
+                You&apos;ve introduced yourself, chosen your path, and shared your motivation.
+              </p>
+              <p className="mt-3 text-xs font-semibold leading-relaxed text-[#d8d7d7]">
+                Review your answers before submitting.
+              </p>
+            </div>
+          ) : (
+            <img src={config.banner} alt={`Registration Stage ${step}`} className="mt-4 w-full" draggable={false} />
+          )}
         </div>
 
         <form id="register-form" onSubmit={handleNext} className="flex flex-1 flex-col">
