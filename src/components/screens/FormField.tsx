@@ -9,10 +9,10 @@ type Props = React.ComponentPropsWithoutRef<"input"> & {
   icon: React.ReactNode;
 };
 
-export default function FormField({ label, icon, id, ...inputProps }: Props) {
+export default function FormField({ label, icon, id, autoComplete = "off", ...inputProps }: Props) {
   return (
-    <div className="w-full">
-      <label htmlFor={id} className="mb-0.5 block pl-8 text-xs font-medium text-white">
+    <div className="w-full font-jakarta">
+      <label htmlFor={id} className="mb-0.5 block pl-8 text-xs font-medium text-white font-jakarta">
         {label}
       </label>
 
@@ -29,8 +29,9 @@ export default function FormField({ label, icon, id, ...inputProps }: Props) {
         <span className="shrink-0 text-[#00f66a]">{icon}</span>
         <input
           id={id}
+          autoComplete={autoComplete}
           {...inputProps}
-          className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/40"
+          className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/40 font-jakarta"
         />
       </div>
     </div>

@@ -139,21 +139,14 @@ const empty: Data = {
 };
 
 function useStoredData() {
-  const [data, setData] = useState<Data>(() => {
-    try {
-      const raw = sessionStorage.getItem(KEY);
-      return raw ? { ...empty, ...JSON.parse(raw) } : empty;
-    } catch {
-      return empty;
-    }
-  });
+  const [data, setData] = useState<Data>(empty);
 
   useEffect(() => {
     try {
-      sessionStorage.setItem(KEY, JSON.stringify(data));
+      sessionStorage.removeItem(KEY);
     } catch {
     }
-  }, [data]);
+  }, []);
 
   const update = (patch: Partial<Data>) => setData((d) => ({ ...d, ...patch }));
 
@@ -198,7 +191,7 @@ function LevelSelect({
           required
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={`w-full cursor-pointer appearance-none bg-transparent font-orbitron text-sm outline-none ${
+          className={`w-full cursor-pointer appearance-none bg-transparent font-jakarta text-sm outline-none ${
             value ? "text-white" : "text-white/40"
           }`}
         >
@@ -219,7 +212,7 @@ function LevelSelect({
 
 function FinalStageLeftPanel() {
   return (
-    <div className="flex h-full w-full flex-col justify-between bg-black p-6 pl-8 font-orbitron select-none">
+    <div className="flex h-full w-full flex-col justify-between bg-black p-6 pl-8 font-jakarta select-none">
       <div>
         <h2 className="text-xs font-bold leading-relaxed tracking-widest text-[#d8d7d7] sm:text-sm">
           FINAL STAGE —<br />HUNTER<br />REGISTRATION
@@ -298,7 +291,7 @@ function CyberneticSubmitButton({
           y="58"
           textAnchor="middle"
           fill="#00f66a"
-          fontFamily="'Orbitron', sans-serif"
+          fontFamily="'Plus Jakarta Sans', sans-serif"
           fontWeight="900"
           fontSize="20"
           letterSpacing="0.15em"
@@ -558,7 +551,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
         id="name"
         label="Full Name"
         required
-        autoComplete="name"
+        autoComplete="off"
         icon={<User size={iconSize} />}
         placeholder="Enter your full name"
         {...field("name")}
@@ -568,7 +561,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
         label="Phone number"
         type="tel"
         required
-        autoComplete="tel"
+        autoComplete="off"
         icon={<Phone size={iconSize} />}
         placeholder="Enter your phone number"
         {...field("phone")}
@@ -578,7 +571,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
         label="Email Address"
         type="email"
         required
-        autoComplete="email"
+        autoComplete="off"
         icon={<Mail size={iconSize} />}
         placeholder="Enter your email address"
         {...field("email")}
@@ -638,7 +631,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
   );
 
   const errorMessage = error && (
-    <p role="alert" className="text-center font-orbitron text-xs text-red-400">
+    <p role="alert" className="text-center font-jakarta text-xs text-red-400">
       {error}
     </p>
   );
@@ -674,7 +667,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
           <Check size={16} strokeWidth={3.5} />
         </button>
 
-        <p className="select-none font-orbitron text-xs leading-relaxed text-gray-200 sm:text-sm">
+        <p className="select-none font-jakarta text-xs leading-relaxed text-gray-200 sm:text-sm">
           I confirm that my information is accurate and understand that it will
           be used for the OMC recruitment process.
         </p>
@@ -690,7 +683,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
         <button
           type="button"
           onClick={handlePrev}
-          className="flex cursor-pointer items-center gap-1 font-orbitron text-xs text-[#00f66a]/70 transition-colors hover:text-[#00f66a]"
+          className="flex cursor-pointer items-center gap-1 font-jakarta text-xs text-[#00f66a]/70 transition-colors hover:text-[#00f66a]"
         >
           <ArrowLeft size={14} /> Back to Stage {step - 1}
         </button>
@@ -751,7 +744,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
     });
 
     return (
-      <section className="w-full bg-black py-4 flex flex-col items-center justify-center">
+      <section className="min-h-screen w-full bg-black py-4 flex flex-col items-center justify-center font-jakarta">
         <RegistrationFrameDesktop
           leftPanel={
             step === 5 ? (
@@ -784,6 +777,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
         >
           <form
             id="register-form"
+            autoComplete="off"
             onSubmit={handleNext}
             className={
               step === 3
@@ -795,7 +789,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
           >
             <header className={`text-center ${step === 3 ? "department-heading" : ""}`}>
               <h1
-                className={`mb-1 font-orbitron font-bold text-white ${
+                className={`mb-1 font-jakarta font-bold text-white ${
                   step === 3 ? "text-2xl lg:text-3xl" : step === 5 ? "text-2xl lg:text-3xl" : "text-2xl lg:text-3xl tracking-wide"
                 }`}
               >
@@ -898,9 +892,9 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
   });
 
   return (
-    <section className="w-full bg-black p-3 text-white flex flex-col items-center justify-center">
+    <section className="flex min-h-screen w-full flex-col justify-center bg-black px-3 py-3 select-none font-jakarta">
       <div
-        className="mx-auto flex w-full max-w-[430px] flex-col"
+        className="mx-auto flex min-h-[calc(100vh-1.5rem)] w-full max-w-[430px] flex-col font-jakarta"
         style={{
           boxSizing: "border-box",
           minWidth: mobileSlice.left + mobileSlice.right,
@@ -921,19 +915,19 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
             <img src="/LogoV.svg" alt="Logo" className={`${config.introImage ? "h-10" : "h-8"} w-auto mix-blend-screen`} draggable={false} />
           </div>
 
-          <p className="mt-3 text-center font-orbitron text-xs tracking-widest text-white">{config.label}</p>
+          <p className="mt-3 text-center font-jakarta text-xs tracking-widest text-white">{config.label}</p>
 
           {config.introImage ? (
             <img src={config.introImage} alt={config.heading} className="mt-3 w-full" draggable={false} />
           ) : (
             <div className="mt-3 text-left">
-              <h1 className="font-orbitron text-2xl font-bold leading-tight text-white">{config.heading}</h1>
+              <h1 className="font-jakarta text-2xl font-bold leading-tight text-white">{config.heading}</h1>
               <p className="mt-1 text-xs text-[#00f66a]">{config.subtitle}</p>
             </div>
           )}
 
           {step === 5 ? (
-            <div className="mt-4 rounded-xl border border-[#00f66a]/30 bg-[#060c12]/90 p-5 font-orbitron shadow-[0_0_18px_rgba(0,246,106,0.12)]">
+            <div className="mt-4 rounded-xl border border-[#00f66a]/30 bg-[#060c12]/90 p-5 font-jakarta shadow-[0_0_18px_rgba(0,246,106,0.12)]">
               <h2 className="text-xs font-bold leading-relaxed tracking-widest text-[#d8d7d7]">
                 FINAL STAGE —<br />HUNTER REGISTRATION
               </h2>
@@ -949,7 +943,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
           )}
         </div>
 
-        <form id="register-form" onSubmit={handleNext} className="flex flex-1 flex-col">
+        <form id="register-form" autoComplete="off" onSubmit={handleNext} className="flex flex-1 flex-col">
           {step === 1 && (
             <div className="my-auto flex flex-col gap-4 py-6">
               {identityFields}
