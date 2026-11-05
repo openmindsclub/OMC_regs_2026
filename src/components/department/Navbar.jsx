@@ -581,6 +581,12 @@ export default function Navbar({ departments = DEPARTMENT_LINKS }) {
           className="flex items-center gap-2 group md:justify-self-start"
         >
           <HunterLogo className="h-7 sm:h-8 md:h-10 w-auto" />
+          <img
+            src="/LogoV.svg"
+            alt="OMC logo"
+            draggable={false}
+            className="h-7 sm:h-8 md:h-10 w-auto select-none transition-transform duration-300 group-hover:scale-105"
+          />
         </Link>
 
         <div className="hidden md:flex items-center gap-4 lg:gap-8">
