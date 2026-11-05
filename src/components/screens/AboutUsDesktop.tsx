@@ -49,7 +49,6 @@ export default function AboutUsDesktop() {
                   <img src="/Arrow.svg" alt="" className="h-4 w-auto shrink-0 transition-transform duration-200 group-hover:translate-x-1" />
                   <div className="flex flex-col items-start font-black text-white text-sm sm:text-base lg:text-lg leading-none tracking-widest">
                     <span>EXPLORE</span>
-                    <span>DEPS</span>
                   </div>
                   <img src="/neon-bevel.svg" alt="" className="h-7 lg:h-8 w-auto shrink-0 ml-3 sm:ml-4" />
                 </div>

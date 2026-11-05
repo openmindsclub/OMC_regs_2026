@@ -48,7 +48,6 @@ export default function AboutUsMobile() {
               <img src="/Arrow.svg" alt="" className="h-3.5 w-auto shrink-0" />
               <div className="flex flex-col items-start font-black text-white text-xs leading-none tracking-widest">
                 <span>EXPLORE</span>
-                <span>DEPS</span>
               </div>
               <img src="/neon-bevel.svg" alt="" className="h-6 w-auto shrink-0 ml-2" />
             </div>
