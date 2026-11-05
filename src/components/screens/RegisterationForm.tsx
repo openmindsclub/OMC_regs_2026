@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
+import { useNavigate } from "react-router-dom";
 import { User, Phone, Mail, GraduationCap, BookOpen, Building2, ArrowLeft } from "lucide-react";
 import RegistrationFrameDesktop from "../frames/registeration/registerationFrameDesktop";
 import FormField from "./FormField";
+import StatusModal, { type ModalType } from "../common/StatusModal";
+import {
+  submitRegistration,
+  type CreateRegistrationPayload,
+  type HunterDepartment,
+} from "../../services/registrationService";
 import "./Register.css";
 
-/* ---------- mobile frame (377×824 outline + green accents) ---------- */
 const frameSvg = `<svg width="377" height="824" viewBox="0 0 377 824" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M1.5 77.3303V18.1827L23.5 1.5H121.5L131.5 7.56642H245.5L255.5 1.5H353.5L375.5 18.1827V236.574L369.5 242.64V735.537L375.5 741.603V808.334L355.5 823.5H261.5L251.5 818.95H25.5L1.5 800.751V312.404L7.5 306.338V84.9133L1.5 77.3303Z" stroke="#303539" stroke-width="2"/>
 <path d="M1.5 43.5V23.5L23.5 1.5H77.5M301.5 1.5H353.5L375.5 23.5V43.5" stroke="#00F66A" stroke-width="3"/>
@@ -13,7 +19,6 @@ const frameSvg = `<svg width="377" height="824" viewBox="0 0 377 824" fill="none
 const frameSrc = `data:image/svg+xml,${encodeURIComponent(frameSvg)}`;
 const slice = { top: 90, right: 24, bottom: 90, left: 24 };
 
-/* ---------- steps ---------- */
 type Step = 1 | 2 | 3 | 4;
 
 const STEPS: Record<
@@ -54,7 +59,6 @@ const STEPS: Record<
 
 const LEVELS = ["1st year", "2nd year", "3rd year", "4th year", "5th year"];
 
-/* ---------- departments ---------- */
 interface Department {
   id: string;
   name: string;
@@ -72,7 +76,14 @@ const departments: Department[] = [
   { id: "b2b", name: "B2B", type: "MANIPULATION", character: "ILLUMI", image: "/images/departements/b2b.png", color: "#D8D8D8" },
 ];
 
-/* ---------- screen size ---------- */
+const DEPARTMENT_MAP: Record<string, HunterDepartment> = {
+  multimedia: "Multimedia",
+  it: "IT",
+  marketing: "Marketing",
+  design: "Design",
+  b2b: "B2B",
+};
+
 function useIsDesktop() {
   const query = "(min-width: 1024px)";
   const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
@@ -87,7 +98,6 @@ function useIsDesktop() {
   return matches;
 }
 
-/* ---------- every value, saved in sessionStorage ---------- */
 const KEY = "registration-data";
 
 type Data = {
@@ -132,23 +142,20 @@ function useStoredData() {
     try {
       sessionStorage.setItem(KEY, JSON.stringify(data));
     } catch {
-      /* storage unavailable: values just won't persist */
     }
   }, [data]);
 
   const update = (patch: Partial<Data>) => setData((d) => ({ ...d, ...patch }));
 
-  // value + onChange to spread on a FormField
   const field = (key: TextKey) => ({
     value: data[key],
     onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
       update({ [key]: e.target.value } as Partial<Data>),
   });
 
-  return { data, update, field };
+  return { data, update, field, setData };
 }
 
-/* ---------- level of study select ---------- */
 function LevelSelect({
   value,
   onChange,
@@ -161,7 +168,7 @@ function LevelSelect({
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor="level" className="font-orbitron text-xs font-semibold tracking-wide text-white">
-        Current level of study 
+        Current level of study
       </label>
       <div className="relative flex items-center">
         <span className="pointer-events-none absolute left-3 flex items-center text-[#00f66a]">
@@ -191,19 +198,32 @@ function LevelSelect({
   );
 }
 
-/* ---------- the single component ---------- */
 export default function RegisterationForm({ initialStep = 1 }: { initialStep?: Step }) {
+  const navigate = useNavigate();
   const isDesktop = useIsDesktop();
-  const { data, update, field } = useStoredData();
+  const { data, update, field, setData } = useStoredData();
   const [step, setStep] = useState<Step>(initialStep);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [modalConfig, setModalConfig] = useState<{
+    isOpen: boolean;
+    type: ModalType;
+    title?: string;
+    message: string;
+    details?: string[];
+    actionLabel?: string;
+    onCloseCallback?: () => void;
+  }>({
+    isOpen: false,
+    type: "success",
+    message: "",
+  });
 
   const config = STEPS[step];
   const selected = data.department;
   const iconSize = isDesktop ? 18 : 16;
   const brandIcon = isDesktop ? "h-[18px] w-[18px]" : "h-4 w-4";
 
-  // preload every banner to avoid a flash when switching
   useEffect(() => {
     Object.values(STEPS).forEach(({ banner, introImage }) => {
       new Image().src = banner;
@@ -211,7 +231,6 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
     });
   }, []);
 
-  // each new step starts at the top of the page (mobile)
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [step]);
@@ -221,7 +240,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
     update({ department: selected === id ? null : id });
   };
 
-  const handleNext = (e: React.FormEvent) => {
+  const handleNext = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (step === 3 && !selected) {
@@ -232,9 +251,103 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
 
     if (step < 4) {
       setStep((step + 1) as Step);
-    } else {
-      console.log("Registration payload:", data); // replace with your API call
-      // after a successful send: sessionStorage.removeItem(KEY); navigate("/success");
+      return;
+    }
+
+    if (!data.name.trim()) {
+      setError("First Name is required.");
+      return;
+    }
+    if (!data.phone.trim()) {
+      setError("Phone number is required.");
+      return;
+    }
+    if (!data.email.trim()) {
+      setError("Email address is required.");
+      return;
+    }
+    if (!data.discord.trim()) {
+      setError("Discord ID is required.");
+      return;
+    }
+    if (!data.specialty.trim()) {
+      setError("Specialty is required.");
+      return;
+    }
+    if (!data.level.trim()) {
+      setError("Level of study is required.");
+      return;
+    }
+    if (!data.university.trim()) {
+      setError("University is required.");
+      return;
+    }
+    if (!data.department) {
+      setError("Please choose a department.");
+      return;
+    }
+
+    const trimmedName = data.name.trim();
+    const nameParts = trimmedName.split(/\s+/);
+    const firstName = nameParts[0] || trimmedName;
+    const lastName = nameParts.slice(1).join(" ") || undefined;
+    const mappedDept =
+      DEPARTMENT_MAP[data.department.toLowerCase()] ||
+      (data.department as HunterDepartment);
+
+    const payload: CreateRegistrationPayload = {
+      firstName,
+      lastName,
+      phoneNumber: data.phone.trim(),
+      email: data.email.trim().toLowerCase(),
+      discordId: data.discord.trim(),
+      specialty: data.specialty.trim(),
+      currentLevel: data.level.trim(),
+      university: data.university.trim(),
+      department: mappedDept,
+      githubUrl: data.github.trim() || undefined,
+      linkedinUrl: data.linkedin.trim() || undefined,
+    };
+
+    setIsSubmitting(true);
+    try {
+      const response = await submitRegistration(payload);
+      sessionStorage.removeItem(KEY);
+      setData(empty);
+      setModalConfig({
+        isOpen: true,
+        type: "success",
+        title: "REGISTRATION COMPLETE",
+        message:
+          response.message ||
+          "Hunter Registration completed successfully! Good luck with your exam.",
+        actionLabel: "RETURN HOME",
+        onCloseCallback: () => navigate("/"),
+      });
+    } catch (err: unknown) {
+      const errorObj = err as Error & {
+        errors?: Array<{ field: string; message: string }>;
+        duplicateField?: string;
+      };
+
+      const details =
+        errorObj.errors && Array.isArray(errorObj.errors)
+          ? errorObj.errors.map((item) => `${item.field}: ${item.message}`)
+          : undefined;
+
+      setModalConfig({
+        isOpen: true,
+        type: "error",
+        title: "REGISTRATION FAILED",
+        message:
+          errorObj.message ||
+          "An error occurred while submitting your registration. Please check your data and try again.",
+        details,
+        actionLabel: "REVIEW & RETRY",
+        onCloseCallback: undefined,
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -243,12 +356,45 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
     if (step > 1) setStep((step - 1) as Step);
   };
 
-  /* ---------- shared blocks ---------- */
+  const closeModal = () => {
+    const callback = modalConfig.onCloseCallback;
+    setModalConfig((prev) => ({ ...prev, isOpen: false }));
+    if (callback) {
+      callback();
+    }
+  };
+
   const identityFields = (
     <>
-      <FormField id="name" label="First Name" required autoComplete="given-name" icon={<User size={iconSize} />} placeholder="Enter your first name" {...field("name")} />
-      <FormField id="phone" label="Phone number" type="tel" required autoComplete="tel" icon={<Phone size={iconSize} />} placeholder="Enter your phone number" {...field("phone")} />
-      <FormField id="email" label="Email Address" type="email" required autoComplete="email" icon={<Mail size={iconSize} />} placeholder="Enter your email address" {...field("email")} />
+      <FormField
+        id="name"
+        label="First Name"
+        required
+        autoComplete="given-name"
+        icon={<User size={iconSize} />}
+        placeholder="Enter your first name"
+        {...field("name")}
+      />
+      <FormField
+        id="phone"
+        label="Phone number"
+        type="tel"
+        required
+        autoComplete="tel"
+        icon={<Phone size={iconSize} />}
+        placeholder="Enter your phone number"
+        {...field("phone")}
+      />
+      <FormField
+        id="email"
+        label="Email Address"
+        type="email"
+        required
+        autoComplete="email"
+        icon={<Mail size={iconSize} />}
+        placeholder="Enter your email address"
+        {...field("email")}
+      />
       <FormField
         id="discord"
         label="Discord ID"
@@ -262,32 +408,46 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
 
   const academicFields = (
     <>
-      <FormField id="specialty" label="Specialty" required icon={<GraduationCap size={iconSize} />} placeholder="Enter your specialty or field of study" {...field("specialty")} />
+      <FormField
+        id="specialty"
+        label="Specialty"
+        required
+        icon={<GraduationCap size={iconSize} />}
+        placeholder="Enter your specialty or field of study"
+        {...field("specialty")}
+      />
       <LevelSelect value={data.level} onChange={(level) => update({ level })} iconSize={iconSize} />
-      <FormField id="university" label="University" required icon={<Building2 size={iconSize} />} placeholder="Enter your university or institution" {...field("university")} />
+      <FormField
+        id="university"
+        label="University"
+        required
+        icon={<Building2 size={iconSize} />}
+        placeholder="Enter your university or institution"
+        {...field("university")}
+      />
     </>
   );
 
   const profileFields = (
-  <>
-    <FormField
-      id="github"
-      label="GitHub Profile (optional)"
-      type="url"
-      icon={<img src="/Github.svg" alt="" className={`${brandIcon} object-contain`} draggable={false} />}
-      placeholder="https://github.com/yourusername"
-      {...field("github")}
-    />
-    <FormField
-      id="linkedin"
-      label="LinkedIn Profile (optional)"
-      type="url"
-      icon={<img src="/Linkedin.svg" alt="" className={`${brandIcon} object-contain`} draggable={false} />}
-      placeholder="https://www.linkedin.com/in/yourprofile"
-      {...field("linkedin")}
-    />
-  </>
-);
+    <>
+      <FormField
+        id="github"
+        label="GitHub Profile (optional)"
+        type="url"
+        icon={<img src="/Github.svg" alt="" className={`${brandIcon} object-contain`} draggable={false} />}
+        placeholder="https://github.com/yourusername"
+        {...field("github")}
+      />
+      <FormField
+        id="linkedin"
+        label="LinkedIn Profile (optional)"
+        type="url"
+        icon={<img src="/Linkedin.svg" alt="" className={`${brandIcon} object-contain`} draggable={false} />}
+        placeholder="https://www.linkedin.com/in/yourprofile"
+        {...field("linkedin")}
+      />
+    </>
+  );
 
   const errorMessage = error && (
     <p role="alert" className="text-center font-orbitron text-xs text-red-400">
@@ -295,7 +455,6 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
     </p>
   );
 
-  /* back + next buttons (the submit button targets the form by id) */
   const actions = (
     <div className="flex flex-col items-center gap-2">
       {step > 1 && (
@@ -310,21 +469,28 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
       <button
         type="submit"
         form="register-form"
+        disabled={isSubmitting}
         className={`relative flex cursor-pointer items-center justify-center transition-transform active:scale-95 ${
           isDesktop ? "hover:scale-105" : "w-full"
-        }`}
+        } ${isSubmitting ? "pointer-events-none opacity-70" : ""}`}
       >
-        <img
-          src="/Cybernetic button.svg"
-          alt=""
-          className={`${isDesktop ? "h-16" : "mx-auto h-14"} w-auto object-contain`}
-          draggable={false}
-        />
+        {isSubmitting ? (
+          <div className="flex h-14 items-center justify-center gap-2.5 rounded-lg border border-[#00f66a]/60 bg-[#0d131a] px-6 font-orbitron text-xs font-bold tracking-wider text-[#00f66a] shadow-[0_0_20px_rgba(0,246,106,0.3)]">
+            <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#00f66a] border-t-transparent" />
+            TRANSMITTING...
+          </div>
+        ) : (
+          <img
+            src="/Cybernetic button.svg"
+            alt=""
+            className={`${isDesktop ? "h-16" : "mx-auto h-14"} w-auto object-contain`}
+            draggable={false}
+          />
+        )}
       </button>
     </div>
   );
 
-  /* ---------- desktop layout ---------- */
   if (isDesktop) {
     const desktopCards = departments.map((department) => {
       const active = selected === department.id;
@@ -423,11 +589,20 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
             <div className="pb-3">{actions}</div>
           </form>
         </RegistrationFrameDesktop>
+
+        <StatusModal
+          isOpen={modalConfig.isOpen}
+          type={modalConfig.type}
+          title={modalConfig.title}
+          message={modalConfig.message}
+          details={modalConfig.details}
+          actionLabel={modalConfig.actionLabel}
+          onClose={closeModal}
+        />
       </section>
     );
   }
 
-  /* ---------- mobile layout ---------- */
   const mobileCards = departments.map((department, index) => {
     const active = selected === department.id;
     const isLastOdd = index === departments.length - 1 && departments.length % 2 === 1;
@@ -492,7 +667,6 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
           borderImage: `url("${frameSrc}") ${slice.top} ${slice.right} ${slice.bottom} ${slice.left} / ${slice.top}px ${slice.right}px ${slice.bottom}px ${slice.left}px stretch`,
         }}
       >
-        {/* header */}
         <div>
           <div
             className={`mb-2 flex items-center ${
@@ -531,6 +705,16 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
 
         {actions}
       </div>
+
+      <StatusModal
+        isOpen={modalConfig.isOpen}
+        type={modalConfig.type}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        details={modalConfig.details}
+        actionLabel={modalConfig.actionLabel}
+        onClose={closeModal}
+      />
     </section>
   );
 }
