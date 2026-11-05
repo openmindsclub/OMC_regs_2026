@@ -751,7 +751,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
     });
 
     return (
-      <section className="h-screen bg-black">
+      <section className="w-full bg-black py-4 flex flex-col items-center justify-center">
         <RegistrationFrameDesktop
           leftPanel={
             step === 5 ? (
@@ -898,9 +898,9 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
   });
 
   return (
-    <section className="min-h-screen bg-black p-3 text-white">
+    <section className="w-full bg-black p-3 text-white flex flex-col items-center justify-center">
       <div
-        className="mx-auto flex min-h-[calc(100vh-1.5rem)] w-full max-w-[430px] flex-col"
+        className="mx-auto flex w-full max-w-[430px] flex-col"
         style={{
           boxSizing: "border-box",
           minWidth: mobileSlice.left + mobileSlice.right,
@@ -932,7 +932,21 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
             </div>
           )}
 
-          <img src={config.banner} alt={`Registration Stage ${step}`} className="mt-4 w-full" draggable={false} />
+          {step === 5 ? (
+            <div className="mt-4 rounded-xl border border-[#00f66a]/30 bg-[#060c12]/90 p-5 font-orbitron shadow-[0_0_18px_rgba(0,246,106,0.12)]">
+              <h2 className="text-xs font-bold leading-relaxed tracking-widest text-[#d8d7d7]">
+                FINAL STAGE —<br />HUNTER REGISTRATION
+              </h2>
+              <p className="mt-4 text-xs leading-relaxed text-[#d8d7d7]/80">
+                You&apos;ve introduced yourself, chosen your path, and shared your motivation.
+              </p>
+              <p className="mt-3 text-xs font-semibold leading-relaxed text-[#d8d7d7]">
+                Review your answers before submitting.
+              </p>
+            </div>
+          ) : (
+            <img src={config.banner} alt={`Registration Stage ${step}`} className="mt-4 w-full" draggable={false} />
+          )}
         </div>
 
         <form id="register-form" onSubmit={handleNext} className="flex flex-1 flex-col">
