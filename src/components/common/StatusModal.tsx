@@ -71,14 +71,14 @@ export default function StatusModal({
           </div>
 
           <span
-            className={`font-orbitron text-[10px] uppercase tracking-widest ${
+            className={`font-jakarta text-[10px] uppercase tracking-widest ${
               isSuccess ? "text-[#00f66a]/80" : "text-[#f54255]/80"
             }`}
           >
             {isSuccess ? "System Status: Verified" : "System Alert: Exception"}
           </span>
 
-          <h3 className="mt-1 font-orbitron text-lg font-bold tracking-wide text-white">
+          <h3 className="mt-1 font-jakarta text-lg font-bold tracking-wide text-white">
             {title || (isSuccess ? "Registration Complete" : "Submission Failed")}
           </h3>
 
@@ -98,7 +98,7 @@ export default function StatusModal({
             <button
               type="button"
               onClick={onClose}
-              className={`w-full cursor-pointer rounded-lg py-2.5 font-orbitron text-xs font-bold uppercase tracking-wider transition-all duration-150 active:scale-95 ${
+              className={`w-full cursor-pointer rounded-lg py-2.5 font-jakarta text-xs font-bold uppercase tracking-wider transition-all duration-150 active:scale-95 ${
                 isSuccess
                   ? "bg-[#00f66a] text-black shadow-[0_0_15px_rgba(0,246,106,0.4)] hover:bg-[#00f66a]/90 hover:shadow-[0_0_20px_rgba(0,246,106,0.6)]"
                   : "border border-[#f54255] bg-[#f54255]/20 text-[#f54255] hover:bg-[#f54255]/30 hover:shadow-[0_0_15px_rgba(245,66,85,0.4)]"

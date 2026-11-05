@@ -38,7 +38,7 @@ export default function RegistrationFrameDesktop({
   rightPanel?: React.ReactNode;
 }) {
   return (
-    <div className="flex w-full items-center justify-center bg-black py-4 lg:py-8 overflow-x-hidden">
+    <div className="flex w-full items-center justify-center bg-black py-4 lg:py-8 overflow-x-hidden font-jakarta">
       <div
         className="relative origin-center shrink-0"
         style={{
