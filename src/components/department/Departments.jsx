@@ -24,6 +24,7 @@ const CONTENT = [
     media: {
       video: "/killua-lightning.mp4",
       poster: POSTER("killua-lightning"),
+      mobileFocus: "75% 50%",
       title: "/kilwa.svg",
     },
   },
@@ -40,6 +41,7 @@ const CONTENT = [
     media: {
       video: "/gone.mp4",
       poster: POSTER("gone"),
+      mobileFocus: "76% 50%",
       title: "/Multimediagg_vert%201%201.svg",
     },
   },
@@ -54,6 +56,7 @@ const CONTENT = [
     media: {
       video: "/kourabika.mp4",
       poster: POSTER("kourabika"),
+      mobileFocus: "86% 50%",
       title: "/kourabika.svg",
     },
   },
@@ -71,6 +74,7 @@ const CONTENT = [
     media: {
       video: "/krolo.mp4",
       poster: POSTER("krolo"),
+      mobileFocus: "83% 50%",
       title: "/it.svg",
     },
   },
@@ -87,6 +91,7 @@ const CONTENT = [
     media: {
       video: "/yourio.mp4",
       poster: POSTER("yourio"),
+      mobileFocus: "71% 50%",
       title: "/hr.svg",
     },
   },
@@ -104,6 +109,7 @@ const CONTENT = [
     media: {
       video: "/ilomi.mp4",
       poster: POSTER("ilomi"),
+      mobileFocus: "96% 50%",
       title: "/b2b.svg",
     },
   },
@@ -423,7 +429,7 @@ const INTRO_SEQUENCE = [
 
 function DepartmentPage({ dept }) {
   const root = useRef(null);
-  const { video, poster, title } = dept.media;
+  const { video, poster, title, mobileFocus = "50% 50%" } = dept.media;
   const i = DEPARTMENTS.findIndex((d) => d.id === dept.id);
   const prev = DEPARTMENTS[(i - 1 + DEPARTMENTS.length) % DEPARTMENTS.length];
   const next = DEPARTMENTS[(i + 1) % DEPARTMENTS.length];
@@ -458,14 +464,15 @@ function DepartmentPage({ dept }) {
         preload="auto"
         aria-hidden="true"
         poster={poster}
-        className="absolute inset-0 z-0 w-full h-full object-cover object-center pointer-events-none select-none"
+        style={{ "--focus": mobileFocus }}
+        className="absolute inset-0 z-0 w-full h-full object-cover [object-position:var(--focus)] md:[object-position:center] pointer-events-none select-none"
       >
         <source src={video} type="video/mp4" />
       </video>
 
       <Navbar />
 
-      <main className="relative z-20 flex-1 w-full px-3 sm:px-6 lg:px-8 xl:px-12 py-4 sm:py-6 md:py-2 md:min-h-0 flex flex-col justify-center">
+      <main className="relative z-20 flex-1 w-full px-3 sm:px-6 lg:px-8 xl:px-12 pt-4 pb-1 sm:pt-6 md:py-2 md:min-h-0 flex flex-col justify-end md:justify-center">
         <div className="max-w-[1680px] mx-auto w-full">
           <div className="flex flex-col items-start select-none">
             <div
