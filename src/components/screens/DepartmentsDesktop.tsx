@@ -129,12 +129,6 @@ export default function DepartmentsDesktop() {
             })}
           </div>
         </div>
-
-        <div className="relative z-10 flex justify-center items-center mt-6 mb-2">
-          <span className="font-chakra font-bold text-neon-green tracking-[0.35em] text-[clamp(0.85rem,1.2vw,1.1rem)] select-none drop-shadow-[0_0_10px_rgba(0,246,106,0.6)]">
-            HUNTER &times; HUNTER
-          </span>
-        </div>
       </DepartmentsFrameDesktop>
     </section>
   );

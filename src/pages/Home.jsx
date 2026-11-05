@@ -10,8 +10,7 @@ import AboutUs from "../components/screens/AboutUs";
 import DepartmentsSection from "../components/screens/DepartmentsSection";
 import Footer from "./Footer";
 
-// Exam countdown: November 8th 2026, 9 PM (GMT+1)
-const TARGET_TIME = new Date("2026-11-08T21:00:00+01:00").getTime();
+const TARGET_TIME = new Date("2026-11-09T21:00:00+01:00").getTime();
 const pad = (n) => String(n).padStart(2, "0");
 
 function getTimeLeft() {
