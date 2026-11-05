@@ -112,7 +112,7 @@ export default function DepartmentsMobile() {
           })}
         </div>
 
-        <div className="relative z-10 flex justify-center items-center pb-2">
+        <div className="relative z-10 flex justify-center items-center mt-4 pb-2">
           <span className="font-chakra font-bold text-neon-green tracking-[0.3em] text-xs sm:text-sm select-none drop-shadow-[0_0_8px_rgba(0,246,106,0.6)]">
             HUNTER &times; HUNTER
           </span>

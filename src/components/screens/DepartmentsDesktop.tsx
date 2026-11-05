@@ -85,7 +85,7 @@ export default function DepartmentsDesktop() {
         </div>
 
         <div
-          className="relative z-20 w-full max-w-[1550px] mx-auto px-4 my-auto py-8"
+          className="relative z-20 w-full max-w-[1550px] mx-auto px-4 my-auto py-6"
           style={{ perspective: "1400px" }}
         >
           <div className="flex items-center justify-center gap-3 xl:gap-5">
@@ -130,7 +130,7 @@ export default function DepartmentsDesktop() {
           </div>
         </div>
 
-        <div className="relative z-10 flex justify-center items-center pb-3">
+        <div className="relative z-10 flex justify-center items-center mt-6 mb-2">
           <span className="font-chakra font-bold text-neon-green tracking-[0.35em] text-[clamp(0.85rem,1.2vw,1.1rem)] select-none drop-shadow-[0_0_10px_rgba(0,246,106,0.6)]">
             HUNTER &times; HUNTER
           </span>

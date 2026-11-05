@@ -37,7 +37,7 @@ const cutoffs = {
 export default function DepartmentsFrameDesktop(
     props: HTMLAttributes<HTMLDivElement> & { padding?: string },
 ) {
-    const { padding = "60px 60px 70px 60px", children, ...rest } = props;
+    const { padding = "60px 60px 125px 60px", children, ...rest } = props;
     return (
         <AdaptiveFrame
             {...rest}

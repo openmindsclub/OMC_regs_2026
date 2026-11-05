@@ -16,7 +16,7 @@ const cutoffs = {
 export default function DepartmentsFramePhone(
     props: HTMLAttributes<HTMLDivElement> & { padding?: string },
 ) {
-    const { padding = "28px 20px 30px", children, ...rest } = props;
+    const { padding = "28px 20px 55px", children, ...rest } = props;
     return (
         <AdaptiveFrame
             {...rest}
