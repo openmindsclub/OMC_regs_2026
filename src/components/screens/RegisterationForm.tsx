@@ -198,6 +198,18 @@ function LevelSelect({
   );
 }
 
+function sanitizeUrl(rawUrl: string): string | undefined {
+  const trimmed = rawUrl.trim();
+  if (!trimmed) return undefined;
+  if (/^(javascript|data|vbscript):/i.test(trimmed)) {
+    return undefined;
+  }
+  if (!/^https?:\/\//i.test(trimmed)) {
+    return `https://${trimmed}`;
+  }
+  return trimmed;
+}
+
 export default function RegisterationForm({ initialStep = 1 }: { initialStep?: Step }) {
   const navigate = useNavigate();
   const isDesktop = useIsDesktop();
@@ -305,8 +317,8 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
       currentLevel: data.level.trim(),
       university: data.university.trim(),
       department: mappedDept,
-      githubUrl: data.github.trim() || undefined,
-      linkedinUrl: data.linkedin.trim() || undefined,
+      githubUrl: sanitizeUrl(data.github),
+      linkedinUrl: sanitizeUrl(data.linkedin),
     };
 
     setIsSubmitting(true);

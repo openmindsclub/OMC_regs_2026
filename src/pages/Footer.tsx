@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { Link, useLocation } from "react-router-dom";
 import FooterBackgroundDesktop from "../components/frames/footer/FooterBackgroundDesktop";
 import FuturisticCard from "../components/universal-frames/FutursticCard";
 import NavFrame from "../components/frames/footer/NavFrame";
@@ -10,20 +11,30 @@ const instagramSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="31" height=
 const linkedinSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9h4v13H3zm8 0h4v2c1-1.5 2.2-2.3 3.8-2.3 3 0 4.2 2 4.2 5.3v8h-4v-7c0-1.8-.5-3-2-3s-2 1.2-2 3v7h-4zM7 4a2 2 0 1 1-4 0 2 2 0 0 1 4 0"/></svg>`;
 
 const socials = [
-  { label: "Facebook", href: "#", svg: facebookSvg },
-  { label: "Instagram", href: "#", svg: instagramSvg },
-  { label: "LinkedIn", href: "#", svg: linkedinSvg },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/openmindsclub",
+    svg: facebookSvg,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/openmindsclub/",
+    svg: instagramSvg,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/company/open-minds-club/",
+    svg: linkedinSvg,
+  },
 ];
 
 const navItems = [
-  { label: "Home", href: "#home" },
-  { label: "About OMC", href: "#about" },
-  { label: "Our Teams", href: "#teams" },
-  { label: "Events & Experiences", href: "#events" },
-  { label: "Take the Exam", href: "#exam" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Home", to: "/" },
+  { label: "About OMC", to: "/about" },
+  { label: "Departments", to: "/design" },
+  { label: "IT Path", to: "/it" },
+  { label: "Take the Exam", to: "/register" },
 ];
-const activeHref = "#home";
 
 const u = (n: number) => `calc(var(--u) * ${n})`;
 const hairline = `max(1px, ${u(1.5)})`;
@@ -79,10 +90,11 @@ function Chevron() {
 }
 
 function MobileFooter() {
+  const { pathname } = useLocation();
+
   return (
     <div className="px-4 pt-8 pb-[max(1.5rem,env(safe-area-inset-bottom))] @min-[1100px]:hidden sm:px-8">
       <div className="relative mx-auto max-w-xl text-white">
-        {/* chamfered border panel */}
         <div
           aria-hidden
           className="absolute inset-0 bg-[#17543D]"
@@ -95,7 +107,6 @@ function MobileFooter() {
         />
 
         <div className="relative px-5 pt-6 pb-5 sm:px-8 sm:pt-8">
-          {/* slanted ticks (from desktop frame) */}
           <svg
             aria-hidden
             viewBox="0 0 90 12"
@@ -118,7 +129,6 @@ function MobileFooter() {
             ))}
           </svg>
 
-          {/* brand row */}
           <div className="flex items-center gap-4">
             <FuturisticCard
               svg={brandLogoSvg}
@@ -138,15 +148,14 @@ function MobileFooter() {
             somewhere.
           </h2>
 
-          {/* nav: native-style list rows */}
           <nav aria-label="Footer" className="mt-7 font-jakarta">
             <ul className="border-t border-muted">
-              {navItems.map(({ label, href }) => {
-                const active = href === activeHref;
+              {navItems.map(({ label, to }) => {
+                const active = pathname === to;
                 return (
-                  <li key={href} className="border-b border-muted">
-                    <a
-                      href={href}
+                  <li key={to} className="border-b border-muted">
+                    <Link
+                      to={to}
                       aria-current={active ? "page" : undefined}
                       className={`group relative flex min-h-[52px] items-center justify-between gap-3 py-3 pr-1 pl-4 text-[17px] transition-colors duration-150 active:bg-white/5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-neon-green ${
                         active ? "text-neon-green" : "text-white"
@@ -160,14 +169,13 @@ function MobileFooter() {
                       />
                       {label}
                       <Chevron />
-                    </a>
+                    </Link>
                   </li>
                 );
               })}
             </ul>
           </nav>
 
-          {/* socials */}
           <div className="mt-7 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
             <p className="font-jakarta text-base tracking-wider text-white">
               Follow our journey:
@@ -177,6 +185,8 @@ function MobileFooter() {
                 <a
                   key={label}
                   href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={label}
                   className="group inline-flex rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neon-green"
                 >
@@ -189,7 +199,6 @@ function MobileFooter() {
             </div>
           </div>
 
-          {/* bottom bar */}
           <div className="mt-7 flex flex-col items-center gap-3 border-t border-muted pt-5 sm:flex-row sm:justify-between">
             <p className="text-center font-jakarta text-[11px] tracking-[0.15em] text-white/60">
               Open Minds Club · 2026–2027
@@ -203,6 +212,8 @@ function MobileFooter() {
 }
 
 export default function Footer() {
+  const { pathname } = useLocation();
+
   return (
     <footer className="@container w-full bg-black">
       <MobileFooter />
@@ -259,7 +270,6 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* socials */}
             <div
               className="flex shrink-0 flex-col"
               style={{ width: u(259), marginRight: u(63), paddingTop: u(40) }}
@@ -275,6 +285,8 @@ export default function Footer() {
                   <a
                     key={label}
                     href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-label={label}
                     className="group inline-flex"
                   >
@@ -299,13 +311,13 @@ export default function Footer() {
               className="flex h-full w-full items-center font-jakarta"
               style={{ fontSize: u(22) }}
             >
-              {navItems.map(({ label, href }, i) => {
-                const active = href === activeHref;
+              {navItems.map(({ label, to }, i) => {
+                const active = pathname === to;
                 return (
-                  <div key={href} className="contents">
+                  <div key={to} className="contents">
                     {i > 0 && <NavDivider />}
-                    <a
-                      href={href}
+                    <Link
+                      to={to}
                       aria-current={active ? "page" : undefined}
                       className={`group flex flex-1 justify-center whitespace-nowrap transition-colors duration-200 hover:text-neon-green ${
                         active ? "text-neon-green" : "text-white"
@@ -325,7 +337,7 @@ export default function Footer() {
                           />
                         </span>
                       </span>
-                    </a>
+                    </Link>
                   </div>
                 );
               })}

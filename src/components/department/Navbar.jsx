@@ -355,10 +355,10 @@ function RegistrationButton({
 
 const NAV_ITEMS = [
   { id: "home", to: "/", label: "HOME" },
-  { id: "about", to: "/#about", label: "ABOUT" },
+  { id: "about", to: "/about", label: "ABOUT" },
   { id: "department", label: "DEPARTMENT", menu: true },
-  { id: "build", to: "/build", label: "BUILD" },
-  { id: "application", to: "/application", label: "APPLICATION" },
+  { id: "build", to: "/it", label: "BUILD" },
+  { id: "application", to: "/register", label: "APPLICATION" },
 ];
 
 const ITEM =

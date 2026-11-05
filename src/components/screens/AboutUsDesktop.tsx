@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import BatteryLoader from "../animated-props/BatteryLoader";
 import AboutUsFrameCTA from "../frames/about-us/AboutUsFrameCTA";
 import AboutUsFrameDesktop from "../frames/about-us/AboutUsFrameDesktop";
@@ -8,16 +9,17 @@ export default function AboutUsDesktop() {
       <AboutUsFrameDesktop className="relative min-h-screen flex items-center text-white">
         <div className="flex flex-row text-white items-center gap-[clamp(1rem,3vw,4rem)]">
           <img
-            src="japenese-text.svg"
+            src="/japenese-text.svg"
+            alt=""
             className="h-[80vh] w-auto shrink-0 object-contain"
           />
           <div className="flex flex-col gap-[clamp(1.5rem,5vh,4rem)] min-w-0 w-[60%]">
             <div className="flex flex-col gap-4">
               <div className="font-chakra font-bold italic text-[clamp(1.75rem,3.5vw,3rem)]">
                 <h2>Welcome to the</h2>
-                <img src="/association-hd.png" className="max-w-full h-auto" />
+                <img src="/association-hd.png" alt="Association" className="max-w-full h-auto" />
               </div>
-              <span className="flex flex-wrap gap-6 items-center w-fit max-w-full my-4  text-[clamp(1.1rem,2vw,1.875rem)] font-semibold tracking-[25%] italic relative after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:bg-linear-to-r after:from-white after:to-transparent">
+              <span className="flex flex-wrap gap-6 items-center w-fit max-w-full my-4 text-[clamp(1.1rem,2vw,1.875rem)] font-semibold tracking-[25%] italic relative after:absolute after:-bottom-2 after:left-0 after:h-0.5 after:w-full after:bg-linear-to-r after:from-white after:to-transparent">
                 SO YOU WANNA BE A HUNTER?
                 <BatteryLoader />
               </span>
@@ -26,6 +28,7 @@ export default function AboutUsDesktop() {
               <div className="flex flex-start font-chakra text-[clamp(1.75rem,3.5vw,3rem)] font-bold items-start gap-4">
                 <img
                   src="/Club emblem.svg"
+                  alt="Club Emblem"
                   className="size-[clamp(1.75rem,3vw,2.75rem)] shrink-0"
                 />
                 <h2>
@@ -40,30 +43,35 @@ export default function AboutUsDesktop() {
                 ambitions.
               </p>
             </div>
-            <AboutUsFrameCTA className="hover:cursor-pointer w-[40%] min-w-64">
-              <div className="flex font-jakarta text-[clamp(1rem,1.4vw,1.25rem)] font-extrabold items-center gap-4">
-                <img src="Arrow.svg" />
-                EXPLORE DEPS
-                <img src="neon-bevel.svg" className="ml-auto" />
-              </div>
-            </AboutUsFrameCTA>
+            <Link to="/design" className="w-[40%] min-w-64 inline-block">
+              <AboutUsFrameCTA className="hover:cursor-pointer w-full transition-transform duration-200 active:scale-95">
+                <div className="flex font-jakarta text-[clamp(1rem,1.4vw,1.25rem)] font-extrabold items-center gap-4">
+                  <img src="/Arrow.svg" alt="" />
+                  EXPLORE DEPS
+                  <img src="/neon-bevel.svg" alt="" className="ml-auto" />
+                </div>
+              </AboutUsFrameCTA>
+            </Link>
           </div>
         </div>
 
         <div className="absolute right-0 top-0 h-full w-[40%] pointer-events-none">
           <div className="relative size-full">
             <img
-              src="Spiders.svg"
+              src="/Spiders.svg"
+              alt=""
               className="absolute top-[15%] right-[20%] w-[30%] scale-200"
             />
 
             <img
-              src="nen-circle.svg"
+              src="/nen-circle.svg"
+              alt=""
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[80%] object-contain"
             />
 
             <img
-              src="Symbols.svg"
+              src="/Symbols.svg"
+              alt=""
               className="absolute right-[8%] top-1/3 w-[3%]"
             />
 
