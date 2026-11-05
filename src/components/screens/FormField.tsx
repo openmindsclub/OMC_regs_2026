@@ -1,10 +1,8 @@
-// FormField.tsx
+import React from "react";
 import { fieldFrameSrc } from "../frames/registeration/fieldFrame";
 
-// pixels du SVG d'origine (662×101) qui forment les coins
-const slice = { top: 40, right: 40, bottom: 40, left: 100 };
-// taille réelle à l'écran : réduit les coins d'environ 0.35×
-const width = { top: 14, right: 14, bottom: 14, left: 34 };
+export const fieldSlice = { top: 40, right: 40, bottom: 40, left: 100 };
+export const fieldWidth = { top: 14, right: 14, bottom: 14, left: 34 };
 
 type Props = React.ComponentPropsWithoutRef<"input"> & {
   label: string;
@@ -23,8 +21,8 @@ export default function FormField({ label, icon, id, ...inputProps }: Props) {
         style={{
           boxSizing: "border-box",
           borderStyle: "solid",
-          borderWidth: `${width.top}px ${width.right}px ${width.bottom}px ${width.left}px`,
-          borderImage: `url("${fieldFrameSrc}") ${slice.top} ${slice.right} ${slice.bottom} ${slice.left} fill / ${width.top}px ${width.right}px ${width.bottom}px ${width.left}px stretch`,
+          borderWidth: `${fieldWidth.top}px ${fieldWidth.right}px ${fieldWidth.bottom}px ${fieldWidth.left}px`,
+          borderImage: `url("${fieldFrameSrc}") ${fieldSlice.top} ${fieldSlice.right} ${fieldSlice.bottom} ${fieldSlice.left} fill / ${fieldWidth.top}px ${fieldWidth.right}px ${fieldWidth.bottom}px ${fieldWidth.left}px stretch`,
           padding: "4px 8px 4px 0",
         }}
       >

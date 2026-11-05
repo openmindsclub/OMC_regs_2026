@@ -3,7 +3,8 @@ import type { CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Phone, Mail, GraduationCap, BookOpen, Building2, ArrowLeft, Check } from "lucide-react";
 import RegistrationFrameDesktop from "../frames/registeration/registerationFrameDesktop";
-import FormField from "./FormField";
+import FormField, { fieldSlice, fieldWidth } from "./FormField";
+import { fieldFrameSrc } from "../frames/registeration/fieldFrame";
 import StatusModal, { type ModalType } from "../common/StatusModal";
 import {
   submitRegistration,
@@ -17,9 +18,9 @@ const frameSvg = `<svg width="377" height="824" viewBox="0 0 377 824" fill="none
 <path d="M1.5 43.5V23.5L23.5 1.5H77.5M301.5 1.5H353.5L375.5 23.5V43.5" stroke="#00F66A" stroke-width="3"/>
 </svg>`;
 const frameSrc = `data:image/svg+xml,${encodeURIComponent(frameSvg)}`;
-const slice = { top: 90, right: 24, bottom: 90, left: 24 };
+const mobileSlice = { top: 90, right: 24, bottom: 90, left: 24 };
 
-type Step = 1 | 2 | 3 | 4;
+type Step = 1 | 2 | 3 | 4 | 5;
 
 const STEPS: Record<
   Step,
@@ -30,7 +31,7 @@ const STEPS: Record<
     banner: "/Registration stages1.svg",
     leftPanel: "/stage1.svg",
     heading: "Hunter Identity",
-    subtitle: "Your exam begins now, enter your details",
+    subtitle: "Your exam begins now , enter your details",
     introImage: "/Identity introduction.svg",
   },
   2: {
@@ -42,13 +43,20 @@ const STEPS: Record<
     introImage: "/Identity introduction.svg",
   },
   3: {
-    label: "STAGE 03 — CHOOSE YOUR PATH",
+    label: "STAGE 03 — HUNTER REGISTRATION",
     banner: "/Registration stages3.svg",
     leftPanel: "/stage3.svg",
     heading: "Choose Your Path",
     subtitle: "Which department would you like to join?",
   },
   4: {
+    label: "STAGE 04 — HUNTER REGISTRATION",
+    banner: "/Registration stages4.svg",
+    leftPanel: "/stage4.svg",
+    heading: "Your Digital Footprint",
+    subtitle: "Which department would you like to join?",
+  },
+  5: {
     label: "FINAL STAGE — HUNTER REGISTRATION",
     banner: "/Registration stages4.svg",
     leftPanel: "/stage4.svg",
@@ -168,12 +176,21 @@ function LevelSelect({
   iconSize: number;
 }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <label htmlFor="level" className="font-orbitron text-xs font-semibold tracking-wide text-white">
+    <div className="w-full">
+      <label htmlFor="level" className="mb-1 block pl-8 text-xs font-medium text-white">
         Current level of study
       </label>
-      <div className="relative flex items-center">
-        <span className="pointer-events-none absolute left-3 flex items-center text-[#00f66a]">
+      <div
+        className="relative flex items-center gap-3"
+        style={{
+          boxSizing: "border-box",
+          borderStyle: "solid",
+          borderWidth: `${fieldWidth.top}px ${fieldWidth.right}px ${fieldWidth.bottom}px ${fieldWidth.left}px`,
+          borderImage: `url("${fieldFrameSrc}") ${fieldSlice.top} ${fieldSlice.right} ${fieldSlice.bottom} ${fieldSlice.left} fill / ${fieldWidth.top}px ${fieldWidth.right}px ${fieldWidth.bottom}px ${fieldWidth.left}px stretch`,
+          padding: "4px 8px 4px 0",
+        }}
+      >
+        <span className="shrink-0 text-[#00f66a]">
           <BookOpen size={iconSize} />
         </span>
         <select
@@ -181,12 +198,12 @@ function LevelSelect({
           required
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={`w-full cursor-pointer appearance-none rounded-lg border border-[#1c2e22] bg-[#0d131a] px-10 py-2.5 font-orbitron text-sm focus:border-[#00f66a] focus:outline-none ${
-            value ? "text-white" : "text-gray-500"
+          className={`w-full cursor-pointer appearance-none bg-transparent font-orbitron text-sm outline-none ${
+            value ? "text-white" : "text-white/40"
           }`}
         >
-          <option value="" disabled className="bg-black text-gray-500">
-            Select your university year
+          <option value="" disabled className="bg-black text-gray-400">
+            Current level of study
           </option>
           {LEVELS.map((level) => (
             <option key={level} value={level} className="bg-black text-white">
@@ -194,8 +211,108 @@ function LevelSelect({
             </option>
           ))}
         </select>
-        <span className="pointer-events-none absolute right-3 text-xs text-[#00f66a]">▼</span>
+        <span className="pointer-events-none absolute right-4 text-xs text-[#00f66a]">▼</span>
       </div>
+    </div>
+  );
+}
+
+function FinalStageLeftPanel() {
+  return (
+    <div className="flex h-full w-full flex-col justify-between bg-black p-6 pl-8 font-orbitron select-none">
+      <div>
+        <h2 className="text-xs font-bold leading-relaxed tracking-widest text-[#d8d7d7] sm:text-sm">
+          FINAL STAGE —<br />HUNTER<br />REGISTRATION
+        </h2>
+        <p className="mt-8 text-xs leading-relaxed text-[#d8d7d7]/80">
+          You&apos;ve introduced yourself, chosen your path, and shared your motivation.
+        </p>
+        <p className="mt-4 text-xs font-semibold leading-relaxed text-[#d8d7d7]">
+          Review your answers before submitting.
+        </p>
+      </div>
+
+      <div className="mb-6 flex flex-col gap-4">
+        <img
+          src="/Hunter logo.svg"
+          alt="Hunter"
+          className="h-10 w-auto self-start object-contain"
+          draggable={false}
+        />
+        <div className="flex gap-1 text-sm font-black tracking-tighter text-[#00f66a]">
+          {"///////"}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CyberneticSubmitButton({
+  isDesktop,
+  isSubmitting,
+}: {
+  isDesktop: boolean;
+  isSubmitting: boolean;
+}) {
+  return (
+    <div className={`relative flex items-center justify-center ${isDesktop ? "h-16" : "h-14"} w-auto`}>
+      <svg
+        className="h-full w-auto"
+        viewBox="0 0 354 103"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M24.108 7.468h311.268l11.117 10.522v60.26l-18.191 17.218H18.044L6.928 84.946v-60.26z"
+          stroke="#536b67"
+          strokeWidth="1.872"
+        />
+        <g opacity="0.85">
+          <path
+            stroke="#00f66a"
+            strokeWidth="0.749"
+            d="M6.928 49.555v-24.87l17.18-17.217h86.913m131.379 0h92.976l11.117 10.522V50.51m0 13.392V78.25l-18.191 17.217h-86.913m-130.368 0H18.045L6.927 84.946V63.903"
+          />
+        </g>
+        <path
+          d="M28.678 15.12h301.1l9.063 8.388v49.396l-16.112 14.912h-301.1l-7.049-6.524V28.168z"
+          fill="#000"
+          stroke="#00f66a"
+          strokeWidth="1.872"
+        />
+        <path
+          d="M6.928.468h116.716l8.881 4.722h93.88l8.881-4.722h111.642m-340 102h116.716l8.881-4.722h93.88l8.881 4.722h111.642"
+          stroke="#303539"
+          strokeWidth="0.936"
+        />
+        <path fill="#00f66a" d="M154.928.468h43.064V2.34h-43.064z" />
+        <path fill="#303539" d="M154.928 99.468h43.064v1.872h-43.064z" />
+        <path
+          stroke="#39ff14"
+          strokeOpacity="0.439"
+          strokeWidth="0.936"
+          d="m41.141 41.17-3.744 4.681m9.361-4.68-9.361 11.233M52.375 41.17 37.397 58.957m15.914-12.17-12.17 14.979"
+        />
+        <text
+          x={isSubmitting ? "177" : "165"}
+          y="58"
+          textAnchor="middle"
+          fill="#00f66a"
+          fontFamily="'Orbitron', sans-serif"
+          fontWeight="900"
+          fontSize="20"
+          letterSpacing="0.15em"
+        >
+          {isSubmitting ? "TRANSMITTING..." : "SUBMIT"}
+        </text>
+        {!isSubmitting && (
+          <path
+            stroke="#00f66a"
+            strokeWidth="2.34"
+            d="M260 51.766h22.468m-9.629 10.298 9.629-10.298-9.629-10.298"
+          />
+        )}
+      </svg>
     </div>
   );
 }
@@ -257,47 +374,100 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
   const handleNext = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (step === 3 && !selected) {
-      setError("Please choose a department to continue.");
+    if (step === 1) {
+      if (!data.name.trim()) {
+        setError("Please enter your full name.");
+        return;
+      }
+      if (!data.phone.trim()) {
+        setError("Please enter your phone number.");
+        return;
+      }
+      if (!data.email.trim()) {
+        setError("Please enter your email address.");
+        return;
+      }
+      if (!data.discord.trim()) {
+        setError("Please enter your Discord ID.");
+        return;
+      }
+      setError("");
+      setStep(2);
       return;
     }
-    setError("");
 
-    if (step < 4) {
-      setStep((step + 1) as Step);
+    if (step === 2) {
+      if (!data.specialty.trim()) {
+        setError("Please enter your specialty.");
+        return;
+      }
+      if (!data.level.trim()) {
+        setError("Please select your current level of study.");
+        return;
+      }
+      if (!data.university.trim()) {
+        setError("Please enter your university.");
+        return;
+      }
+      setError("");
+      setStep(3);
+      return;
+    }
+
+    if (step === 3) {
+      if (!selected) {
+        setError("Please choose a department to continue.");
+        return;
+      }
+      setError("");
+      setStep(4);
+      return;
+    }
+
+    if (step === 4) {
+      setError("");
+      setStep(5);
       return;
     }
 
     if (!data.name.trim()) {
-      setError("First Name is required.");
+      setError("Full Name is required.");
+      setStep(1);
       return;
     }
     if (!data.phone.trim()) {
       setError("Phone number is required.");
+      setStep(1);
       return;
     }
     if (!data.email.trim()) {
       setError("Email address is required.");
+      setStep(1);
       return;
     }
     if (!data.discord.trim()) {
       setError("Discord ID is required.");
+      setStep(1);
       return;
     }
     if (!data.specialty.trim()) {
       setError("Specialty is required.");
+      setStep(2);
       return;
     }
     if (!data.level.trim()) {
       setError("Level of study is required.");
+      setStep(2);
       return;
     }
     if (!data.university.trim()) {
       setError("University is required.");
+      setStep(2);
       return;
     }
     if (!data.department) {
       setError("Please choose a department.");
+      setStep(3);
       return;
     }
     if (!data.confirmed) {
@@ -386,11 +556,11 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
     <>
       <FormField
         id="name"
-        label="First Name"
+        label="Full Name"
         required
-        autoComplete="given-name"
+        autoComplete="name"
         icon={<User size={iconSize} />}
-        placeholder="Enter your first name"
+        placeholder="Enter your full name"
         {...field("name")}
       />
       <FormField
@@ -446,6 +616,27 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
     </>
   );
 
+  const profileFields = (
+    <>
+      <FormField
+        id="github"
+        label="GitHub Profile"
+        type="url"
+        icon={<img src="/Github.svg" alt="" className={`${brandIcon} object-contain`} draggable={false} />}
+        placeholder="https://github.com/yourusername"
+        {...field("github")}
+      />
+      <FormField
+        id="linkedin"
+        label="LinkedIn Profile"
+        type="url"
+        icon={<img src="/Linkedin.svg" alt="" className={`${brandIcon} object-contain`} draggable={false} />}
+        placeholder="https://www.linkedin.com/in/yourprofile"
+        {...field("linkedin")}
+      />
+    </>
+  );
+
   const errorMessage = error && (
     <p role="alert" className="text-center font-orbitron text-xs text-red-400">
       {error}
@@ -483,7 +674,7 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
           <Check size={16} strokeWidth={3.5} />
         </button>
 
-        <p className="select-none font-orbitron text-xs sm:text-sm leading-relaxed text-gray-200">
+        <p className="select-none font-orbitron text-xs leading-relaxed text-gray-200 sm:text-sm">
           I confirm that my information is accurate and understand that it will
           be used for the OMC recruitment process.
         </p>
@@ -508,20 +699,12 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
         type="submit"
         form="register-form"
         disabled={isSubmitting}
-        className={`relative flex cursor-pointer items-center justify-center transition-transform active:scale-95 ${
-          isDesktop ? "hover:scale-105" : "w-full"
+        className={`relative flex cursor-pointer items-center justify-center transition-transform hover:scale-105 active:scale-95 ${
+          isDesktop ? "" : "w-full"
         } ${isSubmitting ? "pointer-events-none opacity-70" : ""}`}
       >
-        {isSubmitting ? (
-          <div className="flex h-14 items-center justify-center gap-2.5 rounded-lg border border-[#00f66a]/60 bg-[#0d131a] px-8 font-orbitron text-xs font-bold tracking-wider text-[#00f66a] shadow-[0_0_20px_rgba(0,246,106,0.3)]">
-            <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#00f66a] border-t-transparent" />
-            TRANSMITTING...
-          </div>
-        ) : step === 4 ? (
-          <div className="group relative flex h-14 min-w-[220px] items-center justify-center gap-3 rounded-xl border border-[#00f66a] bg-black/90 px-10 font-orbitron text-sm font-bold tracking-widest text-[#00f66a] shadow-[0_0_18px_rgba(0,246,106,0.3)] transition-all duration-200 hover:bg-[#00f66a]/15 hover:shadow-[0_0_30px_rgba(0,246,106,0.6)]">
-            <span>SUBMIT</span>
-            <span className="text-base transition-transform duration-200 group-hover:translate-x-1.5">→</span>
-          </div>
+        {step === 5 ? (
+          <CyberneticSubmitButton isDesktop={isDesktop} isSubmitting={isSubmitting} />
         ) : (
           <img
             src="/Cybernetic button.svg"
@@ -567,23 +750,25 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
       );
     });
 
-    const identityStep = step <= 2;
-
     return (
       <section className="h-screen bg-black">
         <RegistrationFrameDesktop
           leftPanel={
-            <div className="relative flex h-full w-full items-center justify-center">
-              <img
-                src={config.leftPanel}
-                alt={`Stage ${step}`}
-                className="h-full w-full overflow-hidden bg-black object-contain p-6 pl-8"
-                draggable={false}
-              />
-            </div>
+            step === 5 ? (
+              <FinalStageLeftPanel />
+            ) : (
+              <div className="relative flex h-full w-full items-center justify-center">
+                <img
+                  src={config.leftPanel}
+                  alt={`Stage ${step}`}
+                  className="h-full w-full overflow-hidden bg-black object-contain p-6 pl-8"
+                  draggable={false}
+                />
+              </div>
+            )
           }
           rightPanel={
-            identityStep ? (
+            step === 1 ? (
               <div className="relative h-full w-full bg-black">
                 <img src="/gonPic.png" alt="Gon" className="h-[62%] w-full object-cover object-top opacity-50" draggable={false} />
                 <div className="absolute inset-x-0 bottom-16 flex justify-center">
@@ -601,31 +786,49 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
             id="register-form"
             onSubmit={handleNext}
             className={
-              identityStep
-                ? "mx-auto flex h-full w-full max-w-lg flex-col justify-between px-2 py-2"
-                : "department-section flex h-full flex-col justify-between py-4"
+              step === 3
+                ? "department-section flex h-full flex-col justify-between py-4"
+                : step === 5
+                ? "flex h-full flex-col justify-between py-4"
+                : "mx-auto flex h-full w-full max-w-lg flex-col justify-between px-2 py-2"
             }
           >
             <header className={`text-center ${step === 3 ? "department-heading" : ""}`}>
               <h1
                 className={`mb-1 font-orbitron font-bold text-white ${
-                  identityStep ? "mt-6 text-4xl tracking-wide" : `text-3xl ${step === 4 ? "mt-5" : ""}`
+                  step === 3 ? "text-3xl" : step === 5 ? "mt-5 text-3xl" : "mt-6 text-4xl tracking-wide"
                 }`}
               >
                 {config.heading}
               </h1>
-              <p className={`text-[#00f66a] ${identityStep ? "text-sm" : "text-xs"}`}>{config.subtitle}</p>
+              <p className={`text-[#00f66a] ${step === 3 || step === 5 ? "text-xs" : "text-sm"}`}>{config.subtitle}</p>
             </header>
 
-            {step === 1 && <div className="flex flex-col gap-5">{identityFields}</div>}
-            {step === 2 && <div className="flex flex-col gap-5">{academicFields}</div>}
+            {step === 1 && (
+              <div className="my-auto flex flex-col gap-4">
+                {identityFields}
+                {errorMessage}
+              </div>
+            )}
+            {step === 2 && (
+              <div className="my-auto flex flex-col gap-4">
+                {academicFields}
+                {errorMessage}
+              </div>
+            )}
             {step === 3 && (
               <div className="my-auto flex flex-col gap-3">
                 <div className="department-grid">{desktopCards}</div>
                 {errorMessage}
               </div>
             )}
-            {step === 4 && confirmationBlock}
+            {step === 4 && (
+              <div className="my-auto flex flex-col gap-6">
+                {profileFields}
+                {errorMessage}
+              </div>
+            )}
+            {step === 5 && confirmationBlock}
 
             <div className="pb-3">{actions}</div>
           </form>
@@ -700,12 +903,12 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
         className="mx-auto flex min-h-[calc(100vh-1.5rem)] w-full max-w-[430px] flex-col"
         style={{
           boxSizing: "border-box",
-          minWidth: slice.left + slice.right,
-          minHeight: slice.top + slice.bottom,
+          minWidth: mobileSlice.left + mobileSlice.right,
+          minHeight: mobileSlice.top + mobileSlice.bottom,
           padding: "32px 20px 28px",
           borderStyle: "solid",
           borderWidth: 0,
-          borderImage: `url("${frameSrc}") ${slice.top} ${slice.right} ${slice.bottom} ${slice.left} / ${slice.top}px ${slice.right}px ${slice.bottom}px ${slice.left}px stretch`,
+          borderImage: `url("${frameSrc}") ${mobileSlice.top} ${mobileSlice.right} ${mobileSlice.bottom} ${mobileSlice.left} / ${mobileSlice.top}px ${mobileSlice.right}px ${mobileSlice.bottom}px ${mobileSlice.left}px stretch`,
         }}
       >
         <div>
@@ -733,15 +936,31 @@ export default function RegisterationForm({ initialStep = 1 }: { initialStep?: S
         </div>
 
         <form id="register-form" onSubmit={handleNext} className="flex flex-1 flex-col">
-          {step === 1 && <div className="my-auto flex flex-col gap-4 py-6">{identityFields}</div>}
-          {step === 2 && <div className="my-auto flex flex-col gap-4 py-6">{academicFields}</div>}
+          {step === 1 && (
+            <div className="my-auto flex flex-col gap-4 py-6">
+              {identityFields}
+              {errorMessage}
+            </div>
+          )}
+          {step === 2 && (
+            <div className="my-auto flex flex-col gap-4 py-6">
+              {academicFields}
+              {errorMessage}
+            </div>
+          )}
           {step === 3 && (
             <>
               <div className="my-5 grid grid-cols-2 gap-x-3 gap-y-5">{mobileCards}</div>
               <div className="mb-3">{errorMessage}</div>
             </>
           )}
-          {step === 4 && confirmationBlock}
+          {step === 4 && (
+            <div className="my-auto flex flex-col gap-4 py-6">
+              {profileFields}
+              {errorMessage}
+            </div>
+          )}
+          {step === 5 && confirmationBlock}
         </form>
 
         {actions}

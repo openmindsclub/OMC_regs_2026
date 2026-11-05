@@ -1,6 +1,5 @@
 import React from "react";
 
-// Left Panel SVG Frame
 const svg = `<svg width="402" height="847" viewBox="0 0 402 847" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <use xlink:href="#stroke0_111_1195" fill="#1C2634" fill-opacity="0.1" style="mix-blend-mode:overlay"/>
 <mask id="stroke1_111_1195" fill="white">
@@ -19,7 +18,6 @@ const svg = `<svg width="402" height="847" viewBox="0 0 402 847" fill="none" xml
 </svg>
 `;
 
-// Right Panel SVG Outline
 const svgR = `<svg width="401" height="871" viewBox="0 0 401 871" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M1.23767 23.6826L24.1351 0.75H352.007L397.315 44.6635V236.907L379.776 254.473V705.318L399.75 724.835V845.354L374.417 869.75H268.212L249.699 855.112H1.72485V655.55L19.2633 639.936V332.541L0.750488 314.488L1.23767 23.6826Z" stroke-width="1.5" stroke="white"/>
 </svg>`;
@@ -45,7 +43,6 @@ export default function RegistrationFrameDesktop({
         className="relative h-full max-w-full origin-center scale-105"
         style={{ aspectRatio: "1139 / 613" }}
       >
-        {/* Main Outer Frame */}
         <img
           src="/frame.svg"
           alt=""
@@ -53,7 +50,6 @@ export default function RegistrationFrameDesktop({
           draggable={false}
         />
 
-        {/* Left Panel Content Area */}
         {leftPanel && (
           <div
             className="absolute left-[1.9%] top-[10%] h-[84%] overflow-hidden bg-black z-10"
@@ -63,7 +59,6 @@ export default function RegistrationFrameDesktop({
           </div>
         )}
 
-        {/* Left Panel Frame Outline */}
         <img
           src={panelSrc}
           alt=""
@@ -71,7 +66,6 @@ export default function RegistrationFrameDesktop({
           draggable={false}
         />
 
-        {/* Right Panel Area */}
         {rightPanel && (
           <div
             className="absolute right-[2.2%] top-[10%] h-[84%] overflow-hidden bg-black"
@@ -81,7 +75,6 @@ export default function RegistrationFrameDesktop({
           </div>
         )}
 
-        {/* Right Panel Overlay Frame */}
         <img
           src={panelRSrc}
           alt=""
@@ -89,7 +82,6 @@ export default function RegistrationFrameDesktop({
           draggable={false}
         />
 
-        {/* Form Container - Ajusté à bottom-[12%] pour que le bouton se loge parfaitement dans l'encoche inférieure */}
         <div className="absolute bottom-[12%] left-[24%] right-[24%] top-[9%]">
           {children}
         </div>
