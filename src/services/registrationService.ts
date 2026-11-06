@@ -40,7 +40,7 @@ export interface CreateRegistrationPayload {
   department: HunterDepartment;
   secondaryDepartment?: string;
   motivation?: string;
-  expectation?: string;
+  expectations?: string;
   pathDetails?: Record<string, unknown>;
   githubUrl?: string;
   linkedinUrl?: string;
@@ -61,7 +61,7 @@ export interface RegistrationRecord {
   department: HunterDepartment;
   secondaryDepartment?: string;
   motivation?: string;
-  expectation?: string;
+  expectations?: string;
   pathDetails?: Record<string, unknown>;
   githubUrl?: string;
   linkedinUrl?: string;
@@ -122,6 +122,7 @@ const BASE_URL =
   (typeof window !== "undefined" && window.location.hostname === "localhost" && window.location.port !== "5000"
     ? "http://localhost:5000/api"
     : "/api");
+const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
 
 function createHeaders(adminKey?: string, isJson: boolean = true): HeadersInit {
   const headers: Record<string, string> = {};
@@ -168,12 +169,44 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
 export async function submitRegistration(
   payload: CreateRegistrationPayload
 ): Promise<ApiResponse<RegistrationRecord>> {
-  const response = await fetch(`${BASE_URL}/registrations`, {
+  if (!GOOGLE_SCRIPT_URL) {
+    throw new Error("Google Apps Script URL is not configured.");
+  }
+
+  const timestamp = new Date().toISOString();
+  const sheetRow = {
+    id: crypto.randomUUID(),
+    firstName: payload.firstName,
+    lastName: payload.lastName ?? "",
+    phoneNumber: payload.phoneNumber,
+    email: payload.email,
+    discordId: payload.discordId,
+    specialty: payload.specialty,
+    currentLevel: payload.currentLevel,
+    university: payload.university,
+    department: payload.department,
+    secondaryDepartment: payload.secondaryDepartment ?? "",
+    githubUrl: payload.githubUrl ?? "",
+    linkedinUrl: payload.linkedinUrl ?? "",
+    portfolioUrl: payload.portfolioUrl ?? "",
+    expectations: payload.expectations ?? "",
+    motivation: payload.motivation ?? "",
+    status: "pending" as const,
+    adminNotes: "",
+    createdAt: timestamp,
+    updatedAt: timestamp,
+  };
+
+  const response = await fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
-    headers: createHeaders(),
-    body: JSON.stringify(payload),
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(sheetRow),
   });
-  return handleResponse<RegistrationRecord>(response);
+  const result = await handleResponse<RegistrationRecord>(response);
+  if (result.success === false) {
+    throw new Error(result.message || "Google Apps Script rejected the registration.");
+  }
+  return result;
 }
 
 export async function checkHealth(): Promise<HealthResponse> {

@@ -681,7 +681,7 @@ export default function RegisterationForm({
       linkedinUrl: sanitizeUrl(data.linkedin),
       portfolioUrl: sanitizeUrl(data.portfolio),
       motivation: data.motivation.trim(),
-      expectation: data.expectation.trim(),
+      expectations: data.expectation.trim(),
     };
 
     setIsSubmitting(true);
