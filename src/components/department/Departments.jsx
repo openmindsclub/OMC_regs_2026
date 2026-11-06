@@ -2,7 +2,7 @@ import { useId, useLayoutEffect, useRef, useState } from "react";
 import { Link, Navigate, Route, Routes } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import Navbar from "./Navbar";
+import Navbar, { RegistrationButton } from "./Navbar";
 import { DEPARTMENT_LINKS } from "./DepartmentLinks";
 
 gsap.registerPlugin(useGSAP);
@@ -359,6 +359,29 @@ function CycleButton({ to, dir, label }) {
   );
 }
 
+// Mobile-only arrow, styled like the BACK button (glass square + chevron)
+function MobileCycleButton({ to, dir, label }) {
+  const next = dir === "next";
+  return (
+    <Link
+      to={to}
+      aria-label={label}
+      title={label}
+      className="group grid place-items-center size-11 shrink-0 bg-black/30 border border-white/25 backdrop-blur-sm transition-transform duration-200 active:scale-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400"
+    >
+      <svg
+        viewBox="0 0 16 22"
+        aria-hidden="true"
+        className={`h-4 w-auto fill-white transition-colors duration-200 group-active:fill-green-400 ${
+          next ? "" : "-scale-x-100"
+        }`}
+      >
+        <path d="M0 0H6L16 11L6 22H0L10 11Z" />
+      </svg>
+    </Link>
+  );
+}
+
 function CenterAccent({ prev, next }) {
   const uid = useId().replace(/:/g, "");
   const clip = `${uid}-aclip`;
@@ -421,6 +444,7 @@ const INTRO_SEQUENCE = [
     "-=0.5",
   ],
   ["right-card", { x: 60, duration: 0.85, ease: "power2.out" }, "-=0.5"],
+  ["reg-button", { y: 20, duration: 0.6 }, "-=0.4"],
 ];
 
 function DepartmentPage({ dept }) {
@@ -520,6 +544,27 @@ function DepartmentPage({ dept }) {
           <div data-anim="right-card" className="w-full min-w-0 md:col-start-3">
             <SpecializationsCard items={dept.specializations} />
           </div>
+
+          {/* Mobile-only row: prev arrow, registration button, next arrow
+              (on desktop the button lives in the navbar and the arrows
+              are in the center accent). */}
+          <div
+            data-anim="reg-button"
+            className="md:hidden flex w-full items-center justify-center gap-3 pt-1"
+          >
+            <MobileCycleButton
+              dir="prev"
+              to={prev.path}
+              label={`Previous department: ${prev.label}`}
+            />
+            <RegistrationButton />
+            <MobileCycleButton
+              dir="next"
+              to={next.path}
+              label={`Next department: ${next.label}`}
+            />
+          </div>
+
           <div className="hidden md:flex absolute inset-x-0 bottom-[0.6vw] justify-center pointer-events-none z-10">
             <div data-anim="center-accent" className="w-[24.4%] max-w-[420px]">
               <CenterAccent prev={prev} next={next} />
