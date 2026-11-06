@@ -11,7 +11,7 @@ import DepartmentsSection from "../components/screens/DepartmentsSection";
 import Footer from "./Footer";
 import { Link } from "react-router-dom";
 
-const TARGET_TIME = new Date("2026-11-17T23:59:00+01:00").getTime();
+const TARGET_TIME = new Date("2026-11-10T23:59:00+01:00").getTime();
 const pad = (n) => String(n).padStart(2, "0");
 
 function getTimeLeft() {
