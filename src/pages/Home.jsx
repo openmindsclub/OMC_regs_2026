@@ -242,7 +242,6 @@ export default function Home() {
 
   return (
     <main ref={rootRef} className="bg-black text-white">
-      {/* ================= HERO ================= */}
       <section className="relative flex h-[100svh] min-h-[560px] w-full items-center justify-center overflow-hidden">
         {/* Fallback image (always rendered underneath) */}
         <img
