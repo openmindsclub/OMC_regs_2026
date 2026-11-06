@@ -13,7 +13,6 @@ import {
   Check,
   ChevronDown,
   MessageSquareText,
-  Target,
 } from "lucide-react";
 import RegistrationFrameDesktop from "../frames/registeration/registerationFrameDesktop";
 import FormField, { FieldShell, FormTextArea } from "./FormField";
@@ -214,7 +213,6 @@ type Data = {
   linkedin: string;
   portfolio: string;
   motivation: string;
-  expectation: string;
   confirmed: boolean;
 };
 
@@ -233,7 +231,6 @@ const empty: Data = {
   linkedin: "",
   portfolio: "",
   motivation: "",
-  expectation: "",
   confirmed: false,
 };
 
@@ -289,11 +286,6 @@ const RULES: { step: Step; message: string; valid: (d: Data) => boolean }[] = [
     step: 5,
     message: "Please tell us about your motivation.",
     valid: (d) => filled(d.motivation),
-  },
-  {
-    step: 5,
-    message: "Please share your expectations.",
-    valid: (d) => filled(d.expectation),
   },
   {
     step: 6,
@@ -681,21 +673,19 @@ export default function RegisterationForm({
       linkedinUrl: sanitizeUrl(data.linkedin),
       portfolioUrl: sanitizeUrl(data.portfolio),
       motivation: data.motivation.trim(),
-      expectations: data.expectation.trim(),
     };
 
     setIsSubmitting(true);
     try {
-      const response = await submitRegistration(payload);
+      await submitRegistration(payload);
       sessionStorage.removeItem(STORAGE_KEY);
       setData(empty);
       setModalConfig({
         isOpen: true,
         type: "success",
-        title: "REGISTRATION COMPLETE",
+        title: "REGISTRATION SENT",
         message:
-          response.message ||
-          "Hunter Registration completed successfully! Good luck with your exam.",
+          "Your registration request was sent to Google Sheets. The browser cannot verify the sheet write.",
         actionLabel: "RETURN HOME",
         onCloseCallback: () => navigate("/"),
       });
@@ -865,15 +855,6 @@ export default function RegisterationForm({
         icon={<MessageSquareText size={iconSize} />}
         placeholder="Why do you want to join OMC?"
         {...field("motivation")}
-      />
-      <FormTextArea
-        id="expectation"
-        label="Expectation"
-        required
-        maxLength={1000}
-        icon={<Target size={iconSize} />}
-        placeholder="What do you hope to gain or contribute?"
-        {...field("expectation")}
       />
     </>
   );
