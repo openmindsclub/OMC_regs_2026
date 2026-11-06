@@ -9,6 +9,7 @@ import loopVideo from "../assets/loop.mp4";
 import AboutUs from "../components/screens/AboutUs";
 import DepartmentsSection from "../components/screens/DepartmentsSection";
 import Footer from "./Footer";
+import { Link } from "react-router-dom";
 
 const TARGET_TIME = new Date("2026-11-09T21:00:00+01:00").getTime();
 const pad = (n) => String(n).padStart(2, "0");
@@ -292,17 +293,22 @@ export default function Home() {
             draggable="false"
             className="w-[94vw] max-w-[1340px] select-none md:w-[70vw]"
           />
-          <img
-            data-anim="year"
-            src={header2}
-            alt=""
-            aria-hidden="true"
-            draggable="false"
-            className="mt-[2.5vw] w-[70.5vw] max-w-[800px] select-none md:w-[48.5vw]"
-          />
+          <Link
+            to="/register"
+            aria-label="Register for the Hunter Exam"
+            className="group mt-[2.5vw] inline-block rounded-sm outline-none transition-transform duration-300 ease-out hover:scale-[1.04] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-white/70"
+          >
+            <img
+              data-anim="year"
+              src={header2}
+              alt=""
+              aria-hidden="true"
+              draggable="false"
+              className="w-[70.5vw] max-w-200 select-none md:w-[48.5vw]"
+            />
+          </Link>
         </div>
 
-        {/* Scroll hint */}
         <button
           type="button"
           data-anim="scroll"

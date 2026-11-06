@@ -1,5 +1,5 @@
-import type { CSSProperties } from "react";
-import { Link, useLocation } from "react-router-dom";
+import type { CSSProperties, MouseEvent } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import FooterBackgroundDesktop from "../components/frames/footer/FooterBackgroundDesktop";
 import FuturisticCard from "../components/universal-frames/FutursticCard";
 import NavFrame from "../components/frames/footer/NavFrame";
@@ -28,12 +28,52 @@ const socials = [
   },
 ];
 
-const navItems = [
-  { label: "Home", to: "/" },
-  { label: "About OMC", to: "/about" },
-  { label: "Departments", to: "/design" },
+type NavItem = {
+  label: string;
+  to: string;
+  /** "top" = scroll to top of home, otherwise the id of a home-page section */
+  scroll?: string;
+};
+
+const navItems: NavItem[] = [
+  { label: "Home", to: "/", scroll: "top" },
+  { label: "About OMC", to: "/#about", scroll: "about" },
+  { label: "Departments", to: "/#departments", scroll: "departments" },
   { label: "Take the Exam", to: "/register" },
 ];
+
+function useFooterNav() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const isActive = (item: NavItem) => !item.scroll && pathname === item.to;
+
+  const onItemClick = (item: NavItem) => (e: MouseEvent<HTMLAnchorElement>) => {
+    if (!item.scroll) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+    e.preventDefault();
+
+    if (item.scroll === "top") {
+      if (pathname === "/") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.history.replaceState(null, "", "/");
+      } else {
+        navigate("/");
+      }
+      return;
+    }
+
+    const el = pathname === "/" ? document.getElementById(item.scroll) : null;
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.history.replaceState(null, "", `/#${item.scroll}`);
+    } else {
+      navigate(`/#${item.scroll}`);
+    }
+  };
+
+  return { isActive, onItemClick };
+}
 
 const u = (n: number) => `calc(var(--u) * ${n})`;
 const hairline = `max(1px, ${u(1.5)})`;
@@ -89,7 +129,7 @@ function Chevron() {
 }
 
 function MobileFooter() {
-  const { pathname } = useLocation();
+  const { isActive, onItemClick } = useFooterNav();
 
   return (
     <div className="px-4 pt-8 pb-[max(1.5rem,env(safe-area-inset-bottom))] @min-[1100px]:hidden sm:px-8">
@@ -149,12 +189,14 @@ function MobileFooter() {
 
           <nav aria-label="Footer" className="mt-7 font-jakarta">
             <ul className="border-t border-muted">
-              {navItems.map(({ label, to }) => {
-                const active = pathname === to;
+              {navItems.map((item) => {
+                const { label, to } = item;
+                const active = isActive(item);
                 return (
-                  <li key={to} className="border-b border-muted">
+                  <li key={label} className="border-b border-muted">
                     <Link
                       to={to}
+                      onClick={onItemClick(item)}
                       aria-current={active ? "page" : undefined}
                       className={`group relative flex min-h-[52px] items-center justify-between gap-3 py-3 pr-1 pl-4 text-[17px] transition-colors duration-150 active:bg-white/5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-neon-green ${
                         active ? "text-neon-green" : "text-white"
@@ -211,7 +253,7 @@ function MobileFooter() {
 }
 
 export default function Footer() {
-  const { pathname } = useLocation();
+  const { isActive, onItemClick } = useFooterNav();
 
   return (
     <footer id="footer" className="@container w-full bg-black">
@@ -310,13 +352,15 @@ export default function Footer() {
               className="flex h-full w-full items-center font-jakarta"
               style={{ fontSize: u(22) }}
             >
-              {navItems.map(({ label, to }, i) => {
-                const active = pathname === to;
+              {navItems.map((item, i) => {
+                const { label, to } = item;
+                const active = isActive(item);
                 return (
-                  <div key={to} className="contents">
+                  <div key={label} className="contents">
                     {i > 0 && <NavDivider />}
                     <Link
                       to={to}
+                      onClick={onItemClick(item)}
                       aria-current={active ? "page" : undefined}
                       className={`group flex flex-1 justify-center whitespace-nowrap transition-colors duration-200 hover:text-neon-green ${
                         active ? "text-neon-green" : "text-white"

@@ -467,6 +467,26 @@ function DepartmentPage({ dept }) {
 
       <Navbar />
 
+      {/* Mobile-only back button, pinned right below the navbar.
+          Goes to the home page and smooth-scrolls to #departments
+          (the Navbar's hash effect performs the scroll on arrival). */}
+      <div className="relative z-20 md:hidden w-full px-3 sm:px-6 pt-3">
+        <Link
+          to="/#departments"
+          aria-label="Back to departments"
+          className="group inline-flex items-center gap-2 pl-2.5 pr-4 py-1.5 bg-black/30 border border-white/25 backdrop-blur-sm text-white text-xs sm:text-sm font-bold tracking-[1.5px] transition-transform duration-200 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-400"
+        >
+          <svg
+            viewBox="0 0 16 22"
+            aria-hidden="true"
+            className="h-3.5 w-auto -scale-x-100 fill-white transition-colors duration-200 group-active:fill-green-400"
+          >
+            <path d="M0 0H6L16 11L6 22H0L10 11Z" />
+          </svg>
+          BACK
+        </Link>
+      </div>
+
       <main className="relative z-20 flex-1 w-full px-3 sm:px-6 lg:px-8 xl:px-12 pt-4 pb-1 sm:pt-6 md:py-2 md:min-h-0 flex flex-col justify-end md:justify-center">
         <div className="max-w-[1680px] mx-auto w-full">
           <div className="flex flex-col items-start select-none">
