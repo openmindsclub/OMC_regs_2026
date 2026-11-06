@@ -47,28 +47,7 @@ export default function AboutUsDesktop() {
                 ambitions.
               </p>
             </div>
-            <Link
-              to="/design"
-              className="inline-block transition-transform duration-200 active:scale-95"
-            >
-              <AboutUsFrameCTA className="hover:cursor-pointer">
-                <div className="flex items-center gap-3 sm:gap-4 px-5 py-3 font-orbitron">
-                  <img
-                    src="/Arrow.svg"
-                    alt=""
-                    className="h-4 w-auto shrink-0 transition-transform duration-200 group-hover:translate-x-1"
-                  />
-                  <div className="flex flex-col items-start font-black text-white text-sm sm:text-base lg:text-lg leading-none tracking-widest">
-                    <span>EXPLORE</span>
-                  </div>
-                  <img
-                    src="/neon-bevel.svg"
-                    alt=""
-                    className="h-7 lg:h-8 w-auto shrink-0 ml-3 sm:ml-4"
-                  />
-                </div>
-              </AboutUsFrameCTA>
-            </Link>
+           
           </div>
         </div>
 

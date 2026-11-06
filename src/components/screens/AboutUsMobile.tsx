@@ -50,24 +50,7 @@ export default function AboutUsMobile() {
             className="absolute right-0 top-1/3 opacity-60 scale-50 -z-1"
           />
         </div>
-        <Link
-          to="/design"
-          className="self-center transition-transform duration-200 active:scale-95"
-        >
-          <AboutUsFrameCTA className="hover:cursor-pointer">
-            <div className="flex items-center gap-3 px-4 py-2.5 font-orbitron">
-              <img src="/Arrow.svg" alt="" className="h-3.5 w-auto shrink-0" />
-              <div className="flex flex-col items-start font-black text-white text-xs leading-none tracking-widest">
-                <span>EXPLORE</span>
-              </div>
-              <img
-                src="/neon-bevel.svg"
-                alt=""
-                className="h-6 w-auto shrink-0 ml-2"
-              />
-            </div>
-          </AboutUsFrameCTA>
-        </Link>
+       
       </AboutUsFramePhone>
     </section>
   );

@@ -399,7 +399,7 @@ const NAV_ITEMS = [
   { id: "cooldown", scroll: "cooldown", label: "COOLDOWN" },
   { id: "department", label: "DEPARTMENTS", menu: true },
   { id: "about", scroll: "about", label: "ABOUT" },
-  { id: "footer", scroll: "footer", label: "FOOTER" },
+  
 ];
 
 const ITEM =
