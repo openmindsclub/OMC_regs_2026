@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+
 import BatteryLoader from "../animated-props/BatteryLoader";
-import AboutUsFrameCTA from "../frames/about-us/AboutUsFrameCTA";
+
 import AboutUsFramePhone from "../frames/about-us/AboutUsFramePhone";
 
 export default function AboutUsMobile() {

@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+
 import BatteryLoader from "../animated-props/BatteryLoader";
-import AboutUsFrameCTA from "../frames/about-us/AboutUsFrameCTA";
+
 import AboutUsFrameDesktop from "../frames/about-us/AboutUsFrameDesktop";
 
 export default function AboutUsDesktop() {
