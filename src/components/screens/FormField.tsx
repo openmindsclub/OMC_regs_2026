@@ -65,6 +65,7 @@ const frameStyle: React.CSSProperties = {
 type ShellProps = {
   label: string;
   htmlFor?: string;
+  height?: number;
   /** Rendered inside the left tab. */
   icon: React.ReactNode;
   /** Optional element on the right side, e.g. a select chevron. */
@@ -78,6 +79,7 @@ const TRAILING_WIDTH = 24;
 export function FieldShell({
   label,
   htmlFor,
+  height = FRAME.h,
   icon,
   trailing,
   children,
@@ -85,7 +87,7 @@ export function FieldShell({
   const rightEdge = FRAME.w - FRAME.body.right; // empty space right of the body
   const bodyInset = {
     top: px(FRAME.body.top),
-    bottom: px(FRAME.h - FRAME.body.bottom),
+    bottom: px(height - FRAME.body.bottom),
   };
 
   return (
@@ -101,7 +103,7 @@ export function FieldShell({
         {label}
       </label>
 
-      <div className="relative w-full" style={{ height: px(FRAME.h) }}>
+      <div className="relative w-full" style={{ height: px(height) }}>
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"
@@ -115,7 +117,7 @@ export function FieldShell({
             left: px(FRAME.tab.left),
             width: px(FRAME.tab.right - FRAME.tab.left),
             top: px(FRAME.tab.top),
-            height: px(FRAME.body.bottom - FRAME.tab.top),
+            bottom: px(height - FRAME.body.bottom),
             color: COLORS.accent,
           }}
         >
@@ -174,6 +176,28 @@ export default function FormField({
         autoComplete={autoComplete}
         {...inputProps}
         className="h-full w-full bg-transparent font-jakarta text-sm text-white outline-none placeholder:text-white/40"
+      />
+    </FieldShell>
+  );
+}
+
+type TextAreaProps = React.ComponentPropsWithoutRef<"textarea"> & {
+  label: string;
+  icon: React.ReactNode;
+};
+
+export function FormTextArea({
+  label,
+  icon,
+  id,
+  ...textareaProps
+}: TextAreaProps) {
+  return (
+    <FieldShell label={label} htmlFor={id} icon={icon} height={132}>
+      <textarea
+        id={id}
+        {...textareaProps}
+        className="h-full w-full resize-y bg-transparent py-2 font-jakarta text-sm text-white outline-none placeholder:text-white/40"
       />
     </FieldShell>
   );

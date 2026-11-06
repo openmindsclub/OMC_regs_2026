@@ -39,6 +39,8 @@ export interface CreateRegistrationPayload {
   university: string;
   department: HunterDepartment;
   secondaryDepartment?: string;
+  motivation?: string;
+  expectation?: string;
   pathDetails?: Record<string, unknown>;
   githubUrl?: string;
   linkedinUrl?: string;
@@ -58,6 +60,8 @@ export interface RegistrationRecord {
   university: string;
   department: HunterDepartment;
   secondaryDepartment?: string;
+  motivation?: string;
+  expectation?: string;
   pathDetails?: Record<string, unknown>;
   githubUrl?: string;
   linkedinUrl?: string;
