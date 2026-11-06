@@ -693,8 +693,7 @@ export default function RegisterationForm({
         isOpen: true,
         type: "success",
         title: "REGISTRATION SENT",
-        message:
-          "Your registration request was sent to Google Sheets. The browser cannot verify the sheet write.",
+        message: "done you have registered!",
         actionLabel: "RETURN HOME",
         onCloseCallback: () => navigate("/"),
       });
