@@ -40,6 +40,7 @@ export interface CreateRegistrationPayload {
   department: HunterDepartment;
   secondaryDepartment?: string;
   motivation?: string;
+  expectations?: string;
   githubUrl?: string;
   linkedinUrl?: string;
   portfolioUrl?: string;
@@ -70,7 +71,7 @@ export async function submitRegistration(
     githubUrl: payload.githubUrl ?? "",
     linkedinUrl: payload.linkedinUrl ?? "",
     portfolioUrl: payload.portfolioUrl ?? "",
-    expectations: "",
+    expectations: payload.expectations ?? "",
     motivation: payload.motivation ?? "",
     status: "pending" as const,
     adminNotes: "",
