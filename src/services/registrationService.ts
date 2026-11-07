@@ -46,11 +46,27 @@ export interface CreateRegistrationPayload {
   portfolioUrl?: string;
 }
 
+const CLIENT_ID_KEY = "omc_client_id";
+
+function getClientId(): string {
+  try {
+    let clientId = localStorage.getItem(CLIENT_ID_KEY);
+    if (!clientId) {
+      clientId = crypto.randomUUID();
+      localStorage.setItem(CLIENT_ID_KEY, clientId);
+    }
+    return clientId;
+  } catch {
+    // localStorage can be blocked (private mode, strict settings)
+    return crypto.randomUUID();
+  }
+}
+
 const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
 
 export async function submitRegistration(
-  payload: CreateRegistrationPayload
-): Promise<void> {
+  payload: CreateRegistrationPayload,
+): Promise<{ sent: true; verified: false }> {
   if (!GOOGLE_SCRIPT_URL) {
     throw new Error("Google Apps Script URL is not configured.");
   }
@@ -58,6 +74,7 @@ export async function submitRegistration(
   const timestamp = new Date().toISOString();
   const sheetRow = {
     id: crypto.randomUUID(),
+    clientId: getClientId(),
     firstName: payload.firstName,
     lastName: payload.lastName ?? "",
     phoneNumber: payload.phoneNumber,
@@ -85,8 +102,14 @@ export async function submitRegistration(
     headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify(sheetRow),
   });
-  // Apps Script responses are opaque in no-cors mode, so only network failures reject.
+
+  // Opaque in no-cors mode: only network failures reject.
   if (response.type !== "opaque" && !response.ok) {
-    throw new Error(`Google Apps Script request failed with status ${response.status}.`);
+    throw new Error(
+      `Google Apps Script request failed with status ${response.status}.`,
+    );
   }
+
+  // This does not confirm server-side success.
+  return { sent: true, verified: false };
 }
