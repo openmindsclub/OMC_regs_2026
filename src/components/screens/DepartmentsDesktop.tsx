@@ -67,28 +67,28 @@ export default function DepartmentsDesktop() {
           />
         </div>
 
-        <div className="relative z-10 flex flex-col items-center text-center pt-2 pb-4">
+        <div className="relative z-10 flex flex-col items-center text-center pt-8 ">
           <h2 className="font-chakra font-bold italic text-[clamp(1.4rem,2.2vw,2.2rem)] tracking-wide leading-tight">
-            <span className="text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]">
+            <span className="pt-4 text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]">
               Six departments.{" "}
             </span>
-            <span className="text-neon-green drop-shadow-[0_0_14px_rgba(0,246,106,0.6)]">
+            <span className="pt-4 text-neon-green drop-shadow-[0_0_14px_rgba(0,246,106,0.6)]">
               Different abilities.{" "}
             </span>
-            <span className="text-neon-green drop-shadow-[0_0_14px_rgba(0,246,106,0.6)]">
+            <span className="pt-4 text-neon-green drop-shadow-[0_0_14px_rgba(0,246,106,0.6)]">
               One Association
             </span>
           </h2>
-          <p className="font-jakarta text-[clamp(0.85rem,1vw,1.05rem)] text-neutral-300 font-light tracking-wide mt-2">
+          <p className="pt-2 font-jakarta text-[clamp(0.85rem,1vw,1.05rem)] text-neutral-300 font-light tracking-wide mt-2">
             Find your specialization and choose your path
           </p>
         </div>
 
         <div
-          className="relative z-20 w-full max-w-[1550px] mx-auto px-4 my-auto py-6"
-          style={{ perspective: "1400px" }}
+          className="relative z-22 w-full max-w-[2600px] mx-2 my-auto py-6"
+          style={{ perspective: "2600px" }}
         >
-          <div className="flex items-center justify-center gap-3 xl:gap-5">
+          <div className="flex items-center justify-center ">
             {departments.map((dept, index) => {
               const isHovered = hoveredIndex === index;
               const hasHovered = hoveredIndex !== null;
@@ -99,20 +99,20 @@ export default function DepartmentsDesktop() {
                   to={dept.path}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
-                  className="relative flex-1 max-w-[220px] cursor-pointer block select-none"
+                  className="relative flex-1 max-w-[260px] cursor-pointer block select-none"
                   style={{
                     transformStyle: "preserve-3d",
                     transform: isHovered
                       ? "translateZ(65px) translateY(-18px) scale(1.15)"
                       : hasHovered
-                      ? "translateZ(-20px) scale(0.93)"
-                      : "translateZ(0px) scale(1)",
+                        ? "translateZ(-20px) scale(0.93)"
+                        : "translateZ(0px) scale(1)",
                     opacity: isHovered ? 1 : hasHovered ? 0.55 : 1,
                     filter: isHovered
                       ? `drop-shadow(0 0 25px ${dept.glow}) drop-shadow(0 0 50px ${dept.glow}) brightness(1.15)`
                       : hasHovered
-                      ? "brightness(0.7) blur(0.3px)"
-                      : "drop-shadow(0 0 10px rgba(0,0,0,0.5))",
+                        ? "brightness(0.7) blur(0.3px)"
+                        : "drop-shadow(0 0 10px rgba(0,0,0,0.5))",
                     zIndex: isHovered ? 40 : hasHovered ? 10 : 20,
                     transition:
                       "transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.35s ease, opacity 0.35s ease",

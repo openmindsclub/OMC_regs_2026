@@ -382,10 +382,21 @@ function MobileCycleButton({ to, dir, label }) {
   );
 }
 
-function CenterAccent({ prev, next }) {
+function CenterAccent({ prev, next, currentDept }) {
   const uid = useId().replace(/:/g, "");
   const clip = `${uid}-aclip`;
   const rim = `${uid}-arim`;
+
+  const NEN_BY_DEPT = {
+    design: "/Nen-1.png",
+    multimedia: "/Nen-2.png",
+    marketing: "/Nen-3.png",
+    it: "/Nen-4.png",
+    hr: "/Nen-5.png",
+    b2b: "/Nen-6.png",
+  };
+  const nenIcon = currentDept ? NEN_BY_DEPT[currentDept.id] : null;
+
   return (
     <div className="relative w-full aspect-[412/188] select-none pointer-events-none">
       <div
@@ -403,6 +414,14 @@ function CenterAccent({ prev, next }) {
           to={prev.path}
           label={`Previous department: ${prev.label}`}
         />
+        {nenIcon && (
+          <img
+            src={nenIcon}
+            alt=""
+            aria-hidden="true"
+            className="size-[clamp(32px,3.2vw,50px)] object-contain select-none drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]"
+          />
+        )}
         <CycleButton
           dir="next"
           to={next.path}
@@ -567,7 +586,7 @@ function DepartmentPage({ dept }) {
 
           <div className="hidden md:flex absolute inset-x-0 bottom-[0.6vw] justify-center pointer-events-none z-10">
             <div data-anim="center-accent" className="w-[24.4%] max-w-[420px]">
-              <CenterAccent prev={prev} next={next} />
+              <CenterAccent prev={prev} next={next} currentDept={dept} />
             </div>
           </div>
         </div>

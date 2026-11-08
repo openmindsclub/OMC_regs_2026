@@ -8,15 +8,12 @@ import {
   GraduationCap,
   BookOpen,
   Building2,
-  BriefcaseBusiness,
   ArrowLeft,
   Check,
   ChevronDown,
-  MessageSquareText,
-  Target,
 } from "lucide-react";
 import RegistrationFrameDesktop from "../frames/registeration/registerationFrameDesktop";
-import FormField, { FieldShell, FormTextArea } from "./FormField";
+import FormField, { FieldShell } from "./FormField";
 import StatusModal, { type ModalType } from "../common/StatusModal";
 import {
   submitRegistration,
@@ -40,9 +37,9 @@ const PHONE_REGEX = new RegExp(PHONE_PATTERN);
 const PHONE_HINT = "Enter an algerian number, e.g. 0696041061";
 
 const STORAGE_KEY = "registration-data";
-const LAST_STEP = 6;
+const LAST_STEP = 5;
 
-type Step = 1 | 2 | 3 | 4 | 5 | 6;
+type Step = 1 | 2 | 3 | 4 | 5;
 
 const STEPS: Record<
   Step,
@@ -83,16 +80,9 @@ const STEPS: Record<
     banner: "/Registration stages4.svg",
     leftPanel: "/stage4.svg",
     heading: "Your Digital Footprint",
-    subtitle: "Share your professional links",
+    subtitle: "Which department would you like to join?",
   },
   5: {
-    label: "STAGE 05 — HUNTER REGISTRATION",
-    banner: "/Registration stages4.svg",
-    leftPanel: "/stage4.svg",
-    heading: "Your Story",
-    subtitle: "Tell us what drives you",
-  },
-  6: {
     label: "FINAL STAGE — HUNTER REGISTRATION",
     banner: "/Registration stages4.svg",
     leftPanel: "/stage4.svg",
@@ -195,7 +185,7 @@ const HEADER_STYLES: Record<
 };
 
 const headerVariantFor = (step: Step): HeaderVariant =>
-  step === 3 ? "departments" : step === 6 ? "final" : "default";
+  step === 3 ? "departments" : step === 5 ? "final" : "default";
 
 /* -------------------------------------------------------------------------- */
 /*  Form data + validation                                                    */
@@ -212,9 +202,6 @@ type Data = {
   department: string | null;
   github: string;
   linkedin: string;
-  portfolio: string;
-  motivation: string;
-  expectation: string;
   confirmed: boolean;
 };
 
@@ -231,9 +218,6 @@ const empty: Data = {
   department: null,
   github: "",
   linkedin: "",
-  portfolio: "",
-  motivation: "",
-  expectation: "",
   confirmed: false,
 };
 
@@ -287,16 +271,6 @@ const RULES: { step: Step; message: string; valid: (d: Data) => boolean }[] = [
   },
   {
     step: 5,
-    message: "Please tell us about your motivation.",
-    valid: (d) => filled(d.motivation),
-  },
-  {
-    step: 5,
-    message: "Please share your expectations.",
-    valid: (d) => filled(d.expectation),
-  },
-  {
-    step: 6,
     message:
       "Please confirm that your information is accurate before submitting.",
     valid: (d) => d.confirmed,
@@ -346,7 +320,7 @@ function useStoredData() {
 
   const field = (key: TextKey) => ({
     value: data[key],
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
       update({ [key]: e.target.value } as Partial<Data>),
   });
 
@@ -679,21 +653,20 @@ export default function RegisterationForm({
       department: department?.apiValue ?? (data.department as HunterDepartment),
       githubUrl: sanitizeUrl(data.github),
       linkedinUrl: sanitizeUrl(data.linkedin),
-      portfolioUrl: sanitizeUrl(data.portfolio),
-      motivation: data.motivation.trim(),
-      expectations: data.expectation.trim(),
     };
 
     setIsSubmitting(true);
     try {
-      await submitRegistration(payload);
+      const response = await submitRegistration(payload);
       sessionStorage.removeItem(STORAGE_KEY);
       setData(empty);
       setModalConfig({
         isOpen: true,
         type: "success",
-        title: "REGISTRATION SENT",
-        message: "done you have registered!",
+        title: "REGISTRATION COMPLETE",
+        message:
+          response.message ||
+          "Hunter Registration completed successfully! Good luck with your exam.",
         actionLabel: "RETURN HOME",
         onCloseCallback: () => navigate("/"),
       });
@@ -842,37 +815,6 @@ export default function RegisterationForm({
         placeholder="https://www.linkedin.com/in/yourprofile"
         {...field("linkedin")}
       />
-      <FormField
-        id="portfolio"
-        label="Portfolio"
-        type="url"
-        icon={<BriefcaseBusiness size={iconSize} />}
-        placeholder="https://yourportfolio.com"
-        {...field("portfolio")}
-      />
-    </>
-  );
-
-  const storyFields = (
-    <>
-      <FormTextArea
-        id="motivation"
-        label="Motivation"
-        required
-        maxLength={1000}
-        icon={<MessageSquareText size={iconSize} />}
-        placeholder="Why do you want to join OMC?"
-        {...field("motivation")}
-      />
-      <FormTextArea
-        id="expectation"
-        label="Expectation"
-        required
-        maxLength={1000}
-        icon={<Target size={iconSize} />}
-        placeholder="What do you hope to gain or contribute?"
-        {...field("expectation")}
-      />
     </>
   );
 
@@ -981,7 +923,7 @@ export default function RegisterationForm({
     const formClass =
       step === 3
         ? "flex min-h-full w-full flex-col items-center justify-between gap-5 pt-1 pb-2 text-white"
-        : step === 6
+        : step === 5
           ? "flex min-h-full flex-col justify-between gap-5 pt-1 pb-2"
           : "mx-auto flex min-h-full w-full max-w-lg flex-col justify-between gap-5 px-2 pt-1 pb-2";
 
@@ -1082,13 +1024,7 @@ export default function RegisterationForm({
                 {errorMessage}
               </div>
             )}
-            {step === 5 && (
-              <div className="my-auto flex flex-col gap-5">
-                {storyFields}
-                {errorMessage}
-              </div>
-            )}
-            {step === 6 && confirmationBlock}
+            {step === 5 && confirmationBlock}
 
             <div className="pb-2">{actions}</div>
           </form>
@@ -1227,13 +1163,7 @@ export default function RegisterationForm({
               {errorMessage}
             </div>
           )}
-          {step === 5 && (
-            <div className="my-auto flex flex-col gap-4 py-6">
-              {storyFields}
-              {errorMessage}
-            </div>
-          )}
-          {step === 6 && confirmationBlock}
+          {step === 5 && confirmationBlock}
         </form>
 
         <div className="mt-4">{actions}</div>
