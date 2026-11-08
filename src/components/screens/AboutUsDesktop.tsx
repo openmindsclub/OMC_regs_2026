@@ -47,7 +47,7 @@ export default function AboutUsDesktop() {
                 ambitions.
               </p>
             </div>
-           
+
           </div>
         </div>
 
@@ -75,9 +75,7 @@ export default function AboutUsDesktop() {
               <BatteryLoader />
             </div>
           </div>
-          <span className="font-chakra font-bold text-neon-green tracking-widest absolute bottom-4 left-1/2 -translate-x-1/2 text-[clamp(0.9rem,1.4vw,1.25rem)] whitespace-nowrap">
-            HUNTER X HUNTER
-          </span>
+
         </div>
       </AboutUsFrameDesktop>
     </section>

@@ -11,14 +11,15 @@ import DepartmentsSection from "../components/screens/DepartmentsSection";
 import Footer from "./Footer";
 import { Link } from "react-router-dom";
 
-const TARGET_TIME = new Date("2026-11-10T23:59:00+01:00").getTime();
+const TARGET_TIME = new Date("2026-11-09T21:00:00+01:00").getTime();
 const pad = (n) => String(n).padStart(2, "0");
 
 function getTimeLeft() {
   const diff = Math.max(0, TARGET_TIME - Date.now());
   const total = Math.floor(diff / 1000);
   return {
-    hours: Math.floor(total / 3600), // total hours (can exceed 24)
+    days: Math.floor(total / 86400),
+    hours: Math.floor((total % 86400) / 3600),
     minutes: Math.floor((total % 3600) / 60),
     seconds: total % 60,
   };
@@ -44,6 +45,7 @@ function Countdown() {
   }, []);
 
   const units = [
+    { value: pad(t.days), label: "Days" },
     { value: pad(t.hours), label: "Hours" },
     { value: pad(t.minutes), label: "Minutes" },
     { value: pad(t.seconds), label: "Seconds" },
@@ -198,7 +200,7 @@ export default function Home() {
     const v = videoRef.current;
     if (!v) return;
     if (v.readyState >= 3) setVideoReady(true);
-    v.play?.().catch(() => {}); // autoplay blocked → fallback image stays visible
+    v.play?.().catch(() => { }); // autoplay blocked → fallback image stays visible
   }, []);
 
   // One orchestrated entrance + looping scroll hint
@@ -265,9 +267,8 @@ export default function Home() {
           disablePictureInPicture
           aria-hidden="true"
           onCanPlay={() => setVideoReady(true)}
-          className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${
-            videoReady ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"
+            }`}
         />
 
         {/* Edge vignette keeps the navbar + text legible */}
@@ -286,7 +287,7 @@ export default function Home() {
           <h1 className="sr-only">Hunter Exam 2026-2027</h1>
           <img
             data-anim="title"
-            src={header1}
+            src="header-1.svg"
             alt=""
             aria-hidden="true"
             draggable="false"
